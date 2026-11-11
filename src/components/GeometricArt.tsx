@@ -90,7 +90,7 @@ export function ProfilePlaceholderArt({
         alt={alt}
         referrerPolicy="no-referrer"
         onError={() => setImgFailed(true)}
-        className="w-full h-full object-cover"
+        className="w-full h-full object-cover object-[center_20%]"
       />
     );
   }

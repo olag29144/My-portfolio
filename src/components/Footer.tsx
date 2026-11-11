@@ -1,4 +1,6 @@
 import {BrandMark} from './GeometricArt';
+import {Magnetic} from './MagneticButton';
+import {useCursor} from '../context/CursorContext';
 
 interface FooterProps {
   email: string;
@@ -16,33 +18,44 @@ const FOOTER_LINKS = [
 
 export function Footer({email}: FooterProps) {
   const year = new Date().getFullYear();
+  const {setCursor, resetCursor} = useCursor();
 
   return (
-    <footer className="bg-[#101426] text-white border-t border-white/10">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8 pb-8 border-b border-white/10">
-          <div className="flex flex-col gap-1.5">
-            <a
-              href="#home"
-              className="inline-flex items-center gap-3 text-lg font-display font-extrabold tracking-tight text-white"
-            >
-              <BrandMark className="w-8 h-8" />
-              <span>GABBY TEQ</span>
-            </a>
-            <p className="text-xs text-white/60">
+    <footer className="bg-white text-[#101426] border-t border-[#101426]/8 relative overflow-hidden w-full max-w-full">
+      {/* Subtle bottom gradient glow */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -bottom-16 left-1/2 -translate-x-1/2 w-[600px] h-32 bg-gradient-to-t from-[#087BFF]/8 to-transparent blur-2xl"
+      />
+
+      <div className="relative mx-auto max-w-6xl px-4 sm:px-6 py-14">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8 pb-10 border-b border-[#101426]/8">
+          <div className="flex flex-col gap-2">
+            <Magnetic strength={0.2} cursorType="hover">
+              <a
+                href="#home"
+                className="inline-flex items-center gap-3 text-xl font-display font-extrabold tracking-tight text-[#101426] group"
+              >
+                <BrandMark className="w-8 h-8 transition-transform duration-300 group-hover:rotate-12" />
+                <span>GABBY TEQ</span>
+              </a>
+            </Magnetic>
+            <p className="text-xs text-[#101426]/65 leading-relaxed">
               Joseph Gabriel Olaoluwa &bull; Web Developer | Creative Designer | UI/UX Designer &bull; Nigeria
             </p>
           </div>
 
           <nav
             aria-label="Footer navigation"
-            className="flex flex-wrap items-center gap-6 text-xs sm:text-sm text-white/70"
+            className="flex flex-wrap items-center gap-6 text-xs sm:text-sm text-[#101426]/75"
           >
             {FOOTER_LINKS.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
-                className="hover:text-white transition-colors whitespace-nowrap"
+                onMouseEnter={() => setCursor('hover')}
+                onMouseLeave={() => resetCursor()}
+                className="hover:text-[#087BFF] transition-colors whitespace-nowrap font-medium"
               >
                 {link.label}
               </a>
@@ -50,31 +63,37 @@ export function Footer({email}: FooterProps) {
           </nav>
         </div>
 
-        <div className="pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs text-white/55">
+        <div className="pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs text-[#101426]/60">
           <p>&copy; {year} GABBY TEQ — Joseph Gabriel Olaoluwa. Turning Ideas Into Digital Experiences.</p>
           <div className="flex items-center gap-5">
-            <a
-              href="https://wa.me/2347069536353"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors"
-            >
-              WhatsApp: 07069536353
-            </a>
-            <a
-              href="https://github.com/olag29144"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-white/75 hover:text-white transition-colors"
-            >
-              GitHub
-            </a>
-            <a
-              href={`mailto:${email}`}
-              className="text-white/75 hover:text-[#00D5FF] transition-colors"
-            >
-              {email}
-            </a>
+            <Magnetic strength={0.15} cursorType="contact" cursorText="WHATSAPP">
+              <a
+                href="https://wa.me/2347069536353"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-emerald-600 hover:text-emerald-700 font-semibold transition-colors"
+              >
+                WhatsApp: 07069536353
+              </a>
+            </Magnetic>
+            <Magnetic strength={0.15} cursorType="hover">
+              <a
+                href="https://github.com/olag29144"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#101426]/75 hover:text-[#087BFF] transition-colors font-medium"
+              >
+                GitHub
+              </a>
+            </Magnetic>
+            <Magnetic strength={0.15} cursorType="contact" cursorText="EMAIL">
+              <a
+                href={`mailto:${email}`}
+                className="text-[#087BFF] hover:text-[#792BFF] transition-colors font-medium"
+              >
+                {email}
+              </a>
+            </Magnetic>
           </div>
         </div>
       </div>

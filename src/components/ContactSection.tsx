@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   AlertCircle,
   Check,
@@ -9,13 +9,15 @@ import {
   Mail,
   MapPin,
   MessageCircle,
-  Phone,
   Plus,
   Send,
   Trash2,
+  Sparkles,
 } from 'lucide-react';
 import {motion, useReducedMotion} from 'motion/react';
 import type {ContactInfo, SocialLink} from '../types/portfolio';
+import {Magnetic} from './MagneticButton';
+import {useCursor} from '../context/CursorContext';
 
 interface ContactSectionProps {
   contact: ContactInfo;
@@ -49,6 +51,7 @@ export function ContactSection({
   const [copiedPhone, setCopiedPhone] = useState(false);
   const [copiedDraft, setCopiedDraft] = useState(false);
   const prefersReduced = useReducedMotion();
+  const {setCursor, resetCursor} = useCursor();
 
   useEffect(() => {
     let active = true;
@@ -79,7 +82,7 @@ export function ContactSection({
       setCopiedEmail(true);
       window.setTimeout(() => setCopiedEmail(false), 2000);
     } catch {
-      // Fallback ignored
+      // Fallback
     }
   };
 
@@ -89,7 +92,7 @@ export function ContactSection({
       setCopiedPhone(true);
       window.setTimeout(() => setCopiedPhone(false), 2000);
     } catch {
-      // Fallback ignored
+      // Fallback
     }
   };
 
@@ -100,7 +103,7 @@ export function ContactSection({
       setCopiedDraft(true);
       window.setTimeout(() => setCopiedDraft(false), 2200);
     } catch {
-      // Fallback ignored
+      // Fallback
     }
   };
 
@@ -202,95 +205,100 @@ export function ContactSection({
   return (
     <section
       id="contact"
-      className="relative py-20 sm:py-28 bg-[#F5F7FA] overflow-hidden"
+      className="relative py-24 sm:py-32 bg-[#F5F7FA] overflow-hidden w-full max-w-full transition-colors duration-300"
     >
       {/* Background ambient highlights */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -bottom-20 -left-16 w-96 h-96 rounded-full bg-[#087BFF]/10 blur-3xl"
+        className="pointer-events-none absolute -bottom-20 -left-16 w-[480px] h-[480px] rounded-full bg-gradient-to-tr from-[#087BFF]/14 to-transparent blur-3xl opacity-80 dark:opacity-90"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute top-10 right-0 w-80 h-80 rounded-full bg-[#FF8A24]/10 blur-3xl"
+        className="pointer-events-none absolute top-10 right-0 w-[440px] h-[440px] rounded-full bg-gradient-to-bl from-[#FF8A24]/14 via-[#E83DCE]/10 to-transparent blur-3xl opacity-80 dark:opacity-90"
       />
 
       <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
-          {/* Left Column: Authentic Identity, WhatsApp & Social Links */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-start">
+          {/* Left Column: Direct WhatsApp, Contact Details & Social Channels */}
           <motion.div
-            initial={prefersReduced ? false : {opacity: 0, y: 18}}
+            initial={prefersReduced ? false : {opacity: 0, y: 20}}
             whileInView={{opacity: 1, y: 0}}
             viewport={{once: true, margin: '-60px'}}
             transition={{duration: 0.5, ease: [0.16, 1, 0.3, 1]}}
             className="lg:col-span-5"
           >
-            <p className="text-sm font-semibold text-[#FF8A24] mb-2.5">
-              Contact &amp; Collaboration
+            <p className="text-sm font-semibold text-[#FF8A24] dark:text-[#FFC247] mb-2.5 flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Contact &amp; Collaboration</span>
             </p>
-            <h2 className="font-display font-bold text-3xl sm:text-4xl text-[#101426] tracking-tight text-balance">
+            <h2 className="font-display font-bold text-3xl sm:text-4xl lg:text-[2.65rem] text-[#101426] dark:text-white tracking-tight text-balance leading-tight">
               {contact.heading}
             </h2>
-            <p className="mt-3 text-base text-[#101426]/75 leading-relaxed max-w-md">
+            <p className="mt-3.5 text-base text-[#101426]/75 dark:text-white/75 leading-relaxed max-w-md">
               {contact.description}
             </p>
 
             {/* Direct WhatsApp Action Card */}
-            <div className="mt-8 rounded-2xl bg-gradient-to-br from-emerald-600 to-teal-700 text-white p-5 sm:p-6 shadow-[0_16px_36px_-12px_rgba(16,185,129,0.35)]">
+            <div className="mt-8 rounded-3xl bg-gradient-to-br from-emerald-600 to-teal-700 text-white p-6 sm:p-7 shadow-[0_20px_44px_-12px_rgba(16,185,129,0.38)]">
               <div className="flex items-center justify-between gap-3 mb-2">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center">
                     <MessageCircle className="w-5 h-5 text-white" />
                   </div>
-                  <span className="font-display font-bold text-base text-white">
+                  <span className="font-display font-bold text-lg text-white">
                     Direct WhatsApp
                   </span>
                 </div>
-                <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-white/20 text-white">
+                <span className="text-[11px] font-mono font-semibold px-3 py-1 rounded-full bg-white/20 text-white">
                   Fastest Response
                 </span>
               </div>
 
-              <p className="text-xs text-white/85 leading-relaxed mb-4">
+              <p className="text-xs sm:text-sm text-white/85 leading-relaxed mb-5">
                 Chat directly with Joseph Gabriel Olaoluwa for project inquiries,
-                collaborations, or consultations.
+                collaborations, or tech consultations.
               </p>
 
               <div className="flex flex-wrap items-center gap-3">
-                <a
-                  href={contact.whatsappLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-white text-emerald-800 text-sm font-bold hover:bg-white/90 shadow-sm transition-all"
-                >
-                  <MessageCircle className="w-4 h-4 text-emerald-600" />
-                  <span>Open WhatsApp ({contact.whatsappNumber})</span>
-                </a>
+                <Magnetic strength={0.2} cursorType="contact" cursorText="WHATSAPP">
+                  <a
+                    href={contact.whatsappLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white text-emerald-800 text-sm font-bold hover:bg-white/95 shadow-md transition-all"
+                  >
+                    <MessageCircle className="w-4 h-4 text-emerald-600" />
+                    <span>Open WhatsApp ({contact.whatsappNumber})</span>
+                  </a>
+                </Magnetic>
 
-                <button
-                  type="button"
-                  onClick={handleCopyPhone}
-                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-xs font-semibold text-white transition-colors cursor-pointer"
-                >
-                  {copiedPhone ? (
-                    <>
-                      <Check className="w-3.5 h-3.5" />
-                      <span>Copied Number</span>
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="w-3.5 h-3.5" />
-                      <span>Copy Number</span>
-                    </>
-                  )}
-                </button>
+                <Magnetic strength={0.2} cursorType="hover" cursorText="COPY">
+                  <button
+                    type="button"
+                    onClick={handleCopyPhone}
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-white/15 hover:bg-white/25 text-xs font-semibold text-white transition-colors cursor-pointer"
+                  >
+                    {copiedPhone ? (
+                      <>
+                        <Check className="w-3.5 h-3.5 text-white" />
+                        <span>Copied Number</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5" />
+                        <span>Copy Number</span>
+                      </>
+                    )}
+                  </button>
+                </Magnetic>
               </div>
             </div>
 
             {/* Contact Details Card */}
-            <div className="mt-5 rounded-2xl bg-white border border-[#101426]/8 p-5 sm:p-6 shadow-[0_12px_36px_-18px_rgba(16,20,38,0.1)] space-y-4">
+            <div className="mt-6 rounded-3xl bg-white dark:bg-[#141930] border border-[#101426]/8 dark:border-white/10 p-6 sm:p-7 shadow-[0_16px_40px_-20px_rgba(16,20,38,0.1)] dark:shadow-[0_16px_40px_-20px_rgba(0,0,0,0.5)] space-y-4">
               <div>
-                <div className="flex items-center gap-2 text-xs font-semibold text-[#101426]/55 mb-1.5">
-                  <Mail className="w-3.5 h-3.5 text-[#087BFF]" />
+                <div className="flex items-center gap-2 text-xs font-semibold text-[#101426]/55 dark:text-white/55 mb-1.5">
+                  <Mail className="w-3.5 h-3.5 text-[#087BFF] dark:text-[#00D5FF]" />
                   <span>Email Address</span>
                 </div>
 
@@ -302,13 +310,13 @@ export function ContactSection({
                       onUpdate({...contact, email: e.target.value})
                     }
                     aria-label="Editable contact email"
-                    className="w-full text-sm font-semibold text-[#101426] bg-[#F5F7FA] border border-[#087BFF]/35 rounded-lg px-3 py-2"
+                    className="w-full text-sm font-semibold text-[#101426] dark:text-white bg-[#F5F7FA] dark:bg-white/10 border border-[#087BFF]/35 dark:border-white/20 rounded-lg px-3 py-2"
                   />
                 ) : (
                   <div className="flex items-center justify-between gap-3">
                     <a
                       href={`mailto:${contact.email}`}
-                      className="font-display font-semibold text-base sm:text-lg text-[#101426] hover:text-[#087BFF] transition-colors truncate"
+                      className="font-display font-semibold text-base sm:text-lg text-[#101426] dark:text-white hover:text-[#087BFF] dark:hover:text-[#00D5FF] transition-colors truncate"
                     >
                       {contact.email}
                     </a>
@@ -316,12 +324,12 @@ export function ContactSection({
                       type="button"
                       onClick={handleCopyEmail}
                       aria-label="Copy email address"
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#F5F7FA] hover:bg-[#087BFF]/10 text-xs font-semibold text-[#101426]/80 hover:text-[#087BFF] transition-colors shrink-0 cursor-pointer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#F5F7FA] dark:bg-white/10 hover:bg-[#087BFF]/10 text-xs font-semibold text-[#101426]/80 dark:text-white/80 hover:text-[#087BFF] dark:hover:text-[#00D5FF] transition-colors shrink-0 cursor-pointer"
                     >
                       {copiedEmail ? (
                         <>
-                          <Check className="w-3.5 h-3.5 text-emerald-600" />
-                          <span className="text-emerald-700">Copied</span>
+                          <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                          <span className="text-emerald-700 dark:text-emerald-400">Copied</span>
                         </>
                       ) : (
                         <>
@@ -335,25 +343,25 @@ export function ContactSection({
               </div>
 
               {/* GitHub Link */}
-              <div className="pt-3 border-t border-[#101426]/8">
-                <div className="flex items-center gap-2 text-xs font-semibold text-[#101426]/55 mb-1.5">
-                  <Github className="w-3.5 h-3.5 text-[#101426]" />
+              <div className="pt-3 border-t border-[#101426]/8 dark:border-white/10">
+                <div className="flex items-center gap-2 text-xs font-semibold text-[#101426]/55 dark:text-white/55 mb-1.5">
+                  <Github className="w-3.5 h-3.5 text-[#101426] dark:text-white" />
                   <span>GitHub Profile</span>
                 </div>
                 <a
                   href={contact.githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-sm font-semibold text-[#101426] hover:text-[#087BFF] transition-colors"
+                  className="inline-flex items-center gap-2 text-sm font-semibold text-[#101426] dark:text-white hover:text-[#087BFF] dark:hover:text-[#00D5FF] transition-colors"
                 >
                   <span>github.com/olag29144</span>
-                  <ExternalLink className="w-3.5 h-3.5 text-[#101426]/40" />
+                  <ExternalLink className="w-3.5 h-3.5 text-[#101426]/40 dark:text-white/40" />
                 </a>
               </div>
 
-              <div className="pt-3 border-t border-[#101426]/8">
-                <div className="flex items-center gap-2 text-xs font-semibold text-[#101426]/55 mb-1">
-                  <MapPin className="w-3.5 h-3.5 text-[#792BFF]" />
+              <div className="pt-3 border-t border-[#101426]/8 dark:border-white/10">
+                <div className="flex items-center gap-2 text-xs font-semibold text-[#101426]/55 dark:text-white/55 mb-1">
+                  <MapPin className="w-3.5 h-3.5 text-[#792BFF] dark:text-[#E83DCE]" />
                   <span>Location</span>
                 </div>
                 {isEditing ? (
@@ -364,10 +372,10 @@ export function ContactSection({
                       onUpdate({...contact, locationNote: e.target.value})
                     }
                     aria-label="Location note"
-                    className="w-full text-xs text-[#101426] bg-[#F5F7FA] border border-[#101426]/15 rounded-lg px-3 py-1.5"
+                    className="w-full text-xs text-[#101426] dark:text-white bg-[#F5F7FA] dark:bg-white/10 border border-[#101426]/15 dark:border-white/20 rounded-lg px-3 py-1.5"
                   />
                 ) : (
-                  <p className="text-sm text-[#101426]/75">
+                  <p className="text-sm text-[#101426]/75 dark:text-white/75">
                     {contact.locationNote}
                   </p>
                 )}
@@ -380,7 +388,7 @@ export function ContactSection({
                 isEditing ? (
                   <div
                     key={social.id}
-                    className="grid grid-cols-12 gap-2 items-center bg-white p-2.5 rounded-xl border border-[#101426]/10"
+                    className="grid grid-cols-12 gap-2 items-center bg-white dark:bg-[#141930] p-2.5 rounded-xl border border-[#101426]/10 dark:border-white/10"
                   >
                     <input
                       type="text"
@@ -389,7 +397,7 @@ export function ContactSection({
                         updateSocial(social.id, {platform: e.target.value})
                       }
                       placeholder="Platform"
-                      className="col-span-4 text-xs px-2.5 py-1.5 rounded-lg bg-[#F5F7FA] border border-[#101426]/12"
+                      className="col-span-4 text-xs px-2.5 py-1.5 rounded-lg bg-[#F5F7FA] dark:bg-white/10 border border-[#101426]/12 dark:border-white/15 text-[#101426] dark:text-white"
                     />
                     <input
                       type="text"
@@ -398,7 +406,7 @@ export function ContactSection({
                         updateSocial(social.id, {handle: e.target.value})
                       }
                       placeholder="Handle"
-                      className="col-span-3 text-xs px-2.5 py-1.5 rounded-lg bg-[#F5F7FA] border border-[#101426]/12"
+                      className="col-span-3 text-xs px-2.5 py-1.5 rounded-lg bg-[#F5F7FA] dark:bg-white/10 border border-[#101426]/12 dark:border-white/15 text-[#101426] dark:text-white"
                     />
                     <input
                       type="url"
@@ -407,13 +415,13 @@ export function ContactSection({
                         updateSocial(social.id, {url: e.target.value})
                       }
                       placeholder="https://..."
-                      className="col-span-4 text-xs px-2.5 py-1.5 rounded-lg bg-[#F5F7FA] border border-[#101426]/12"
+                      className="col-span-4 text-xs px-2.5 py-1.5 rounded-lg bg-[#F5F7FA] dark:bg-white/10 border border-[#101426]/12 dark:border-white/15 text-[#101426] dark:text-white"
                     />
                     <button
                       type="button"
                       onClick={() => removeSocial(social.id)}
                       aria-label={`Remove ${social.platform}`}
-                      className="col-span-1 flex items-center justify-center text-red-600 hover:text-red-700 cursor-pointer"
+                      className="col-span-1 flex items-center justify-center text-red-600 dark:text-red-400 hover:text-red-700 cursor-pointer"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -424,20 +432,20 @@ export function ContactSection({
                     href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex items-center justify-between px-4 py-3 rounded-xl bg-white border border-[#101426]/8 hover:border-[#087BFF]/40 transition-colors"
+                    className="group flex items-center justify-between px-5 py-3 rounded-2xl bg-white dark:bg-[#141930] border border-[#101426]/8 dark:border-white/10 hover:border-[#087BFF]/40 dark:hover:border-[#00D5FF]/40 transition-colors shadow-sm"
                   >
                     <div className="flex items-center gap-3 min-w-0">
-                      <span className="font-display font-semibold text-sm text-[#101426] group-hover:text-[#087BFF] transition-colors">
+                      <span className="font-display font-semibold text-sm text-[#101426] dark:text-white group-hover:text-[#087BFF] dark:group-hover:text-[#00D5FF] transition-colors">
                         {social.platform}
                       </span>
-                      <span aria-hidden="true" className="text-[#101426]/30">
-                        ·
+                      <span aria-hidden="true" className="text-[#101426]/30 dark:text-white/30">
+                        &bull;
                       </span>
-                      <span className="text-xs text-[#101426]/60 truncate">
+                      <span className="text-xs text-[#101426]/60 dark:text-white/60 truncate font-mono">
                         {social.handle}
                       </span>
                     </div>
-                    <ExternalLink className="w-3.5 h-3.5 text-[#101426]/40 group-hover:text-[#087BFF] transition-colors shrink-0" />
+                    <ExternalLink className="w-3.5 h-3.5 text-[#101426]/40 dark:text-white/40 group-hover:text-[#087BFF] dark:group-hover:text-[#00D5FF] transition-colors shrink-0" />
                   </a>
                 ),
               )}
@@ -446,7 +454,7 @@ export function ContactSection({
                 <button
                   type="button"
                   onClick={addSocial}
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#087BFF] hover:text-[#792BFF] cursor-pointer pt-1"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#087BFF] dark:text-[#00D5FF] hover:text-[#792BFF] cursor-pointer pt-1"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Add Channel</span>
@@ -455,20 +463,20 @@ export function ContactSection({
             </div>
           </motion.div>
 
-          {/* Right Column: Professional Inquiry Form */}
+          {/* Right Column: Inquiry Form with Focus Glow & Dark Mode */}
           <motion.div
-            initial={prefersReduced ? false : {opacity: 0, y: 18}}
+            initial={prefersReduced ? false : {opacity: 0, y: 20}}
             whileInView={{opacity: 1, y: 0}}
             viewport={{once: true, margin: '-60px'}}
-            transition={{duration: 0.5, delay: 0.08, ease: [0.16, 1, 0.3, 1]}}
+            transition={{duration: 0.5, delay: 0.1, ease: [0.16, 1, 0.3, 1]}}
             className="lg:col-span-7"
           >
-            <div className="rounded-3xl bg-white border border-[#101426]/8 p-6 sm:p-9 shadow-[0_24px_64px_-24px_rgba(16,20,38,0.14)]">
-              <div className="mb-6">
-                <h3 className="font-display font-bold text-2xl text-[#101426] tracking-tight">
+            <div className="rounded-[32px] bg-white dark:bg-[#141930] border border-[#101426]/8 dark:border-white/10 p-7 sm:p-10 shadow-[0_28px_70px_-24px_rgba(16,20,38,0.16)] dark:shadow-[0_28px_70px_-24px_rgba(0,0,0,0.6)]">
+              <div className="mb-7">
+                <h3 className="font-display font-bold text-2xl sm:text-3xl text-[#101426] dark:text-white tracking-tight">
                   Send a Direct Message
                 </h3>
-                <p className="text-xs sm:text-sm text-[#101426]/65 mt-1">
+                <p className="text-xs sm:text-sm text-[#101426]/65 dark:text-white/65 mt-1.5 leading-relaxed">
                   Fill in your details below to discuss web development, UI/UX design, or brand identity projects.
                 </p>
               </div>
@@ -478,7 +486,7 @@ export function ContactSection({
                   <div>
                     <label
                       htmlFor="contact-name"
-                      className="block text-xs font-semibold text-[#101426]/75 mb-2"
+                      className="block text-xs font-semibold text-[#101426]/75 dark:text-white/75 mb-2"
                     >
                       Full Name *
                     </label>
@@ -489,14 +497,14 @@ export function ContactSection({
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="e.g. Michael Adebayo"
-                      className="w-full px-4 py-3 rounded-xl bg-[#F5F7FA] border border-[#101426]/10 text-sm text-[#101426] placeholder:text-[#101426]/40 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#087BFF] transition-all"
+                      className="w-full px-4 py-3.5 rounded-xl bg-[#F5F7FA] dark:bg-[#0E1325] border border-[#101426]/10 dark:border-white/15 text-sm text-[#101426] dark:text-white placeholder:text-[#101426]/40 dark:placeholder:text-white/35 focus:outline-none focus:bg-white dark:focus:bg-[#101426] focus:ring-2 focus:ring-[#087BFF] focus:border-transparent transition-all shadow-inner"
                     />
                   </div>
 
                   <div>
                     <label
                       htmlFor="contact-email"
-                      className="block text-xs font-semibold text-[#101426]/75 mb-2"
+                      className="block text-xs font-semibold text-[#101426]/75 dark:text-white/75 mb-2"
                     >
                       Email Address *
                     </label>
@@ -507,7 +515,7 @@ export function ContactSection({
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="e.g. michael@example.com"
-                      className="w-full px-4 py-3 rounded-xl bg-[#F5F7FA] border border-[#101426]/10 text-sm text-[#101426] placeholder:text-[#101426]/40 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#087BFF] transition-all"
+                      className="w-full px-4 py-3.5 rounded-xl bg-[#F5F7FA] dark:bg-[#0E1325] border border-[#101426]/10 dark:border-white/15 text-sm text-[#101426] dark:text-white placeholder:text-[#101426]/40 dark:placeholder:text-white/35 focus:outline-none focus:bg-white dark:focus:bg-[#101426] focus:ring-2 focus:ring-[#087BFF] focus:border-transparent transition-all shadow-inner"
                     />
                   </div>
                 </div>
@@ -515,7 +523,7 @@ export function ContactSection({
                 <div>
                   <label
                     htmlFor="contact-subject"
-                    className="block text-xs font-semibold text-[#101426]/75 mb-2"
+                    className="block text-xs font-semibold text-[#101426]/75 dark:text-white/75 mb-2"
                   >
                     Subject *
                   </label>
@@ -526,14 +534,14 @@ export function ContactSection({
                     value={subject}
                     onChange={(e) => setSubject(e.target.value)}
                     placeholder="e.g. Custom Web Application Development"
-                    className="w-full px-4 py-3 rounded-xl bg-[#F5F7FA] border border-[#101426]/10 text-sm text-[#101426] placeholder:text-[#101426]/40 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#087BFF] transition-all"
+                    className="w-full px-4 py-3.5 rounded-xl bg-[#F5F7FA] dark:bg-[#0E1325] border border-[#101426]/10 dark:border-white/15 text-sm text-[#101426] dark:text-white placeholder:text-[#101426]/40 dark:placeholder:text-white/35 focus:outline-none focus:bg-white dark:focus:bg-[#101426] focus:ring-2 focus:ring-[#087BFF] focus:border-transparent transition-all shadow-inner"
                   />
                 </div>
 
                 <div>
                   <label
                     htmlFor="contact-message"
-                    className="block text-xs font-semibold text-[#101426]/75 mb-2"
+                    className="block text-xs font-semibold text-[#101426]/75 dark:text-white/75 mb-2"
                   >
                     Message *
                   </label>
@@ -544,14 +552,14 @@ export function ContactSection({
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder="Tell me about your project goals, scope, and timeline..."
-                    className="w-full px-4 py-3 rounded-xl bg-[#F5F7FA] border border-[#101426]/10 text-sm text-[#101426] placeholder:text-[#101426]/40 leading-relaxed focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#087BFF] transition-all"
+                    className="w-full px-4 py-3.5 rounded-xl bg-[#F5F7FA] dark:bg-[#0E1325] border border-[#101426]/10 dark:border-white/15 text-sm text-[#101426] dark:text-white placeholder:text-[#101426]/40 dark:placeholder:text-white/35 leading-relaxed focus:outline-none focus:bg-white dark:focus:bg-[#101426] focus:ring-2 focus:ring-[#087BFF] focus:border-transparent transition-all shadow-inner"
                   />
                 </div>
 
                 {serverEmailReady === false && submission.status === 'idle' && (
-                  <p className="text-xs text-[#101426]/60 leading-relaxed">
+                  <p className="text-xs text-[#101426]/60 dark:text-white/60 leading-relaxed">
                     Note: You can submit here or chat instantly via WhatsApp at{' '}
-                    <span className="font-semibold text-emerald-700">07069536353</span>.
+                    <span className="font-semibold text-emerald-700 dark:text-emerald-400">07069536353</span>.
                   </p>
                 )}
 
@@ -559,9 +567,9 @@ export function ContactSection({
                 {submission.status === 'delivered' && (
                   <div
                     role="status"
-                    className="rounded-xl bg-emerald-50 border border-emerald-200 p-4 flex items-start gap-3 text-emerald-900"
+                    className="rounded-2xl bg-emerald-50 dark:bg-emerald-500/15 border border-emerald-200 dark:border-emerald-500/30 p-4 flex items-start gap-3 text-emerald-900 dark:text-emerald-300"
                   >
-                    <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                    <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
                     <p className="text-sm font-medium leading-relaxed">
                       {submission.message}
                     </p>
@@ -572,10 +580,10 @@ export function ContactSection({
                   submission.status === 'error') && (
                   <div
                     role="alert"
-                    className="rounded-xl bg-amber-50 border border-amber-200 p-4 space-y-3 text-amber-950"
+                    className="rounded-2xl bg-amber-50 dark:bg-amber-500/15 border border-amber-200 dark:border-amber-500/30 p-4 space-y-3 text-amber-950 dark:text-amber-200"
                   >
                     <div className="flex items-start gap-3">
-                      <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+                      <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
                       <p className="text-sm font-medium leading-relaxed">
                         {submission.message}
                       </p>
@@ -585,14 +593,14 @@ export function ContactSection({
                         href={contact.whatsappLink}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-700 transition-colors"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-700 transition-colors"
                       >
                         <MessageCircle className="w-3.5 h-3.5" />
                         <span>Send via WhatsApp</span>
                       </a>
                       <a
                         href={mailtoHref}
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#101426] text-white text-xs font-semibold hover:bg-[#087BFF] transition-colors"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#101426] dark:bg-white/10 text-white text-xs font-semibold hover:bg-[#087BFF] transition-colors"
                       >
                         <Mail className="w-3.5 h-3.5" />
                         <span>Open Email App</span>
@@ -600,11 +608,11 @@ export function ContactSection({
                       <button
                         type="button"
                         onClick={handleCopyMessageDraft}
-                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white border border-amber-300 text-xs font-semibold text-amber-950 hover:bg-amber-100/60 transition-colors cursor-pointer"
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white dark:bg-white/10 border border-amber-300 dark:border-amber-500/30 text-xs font-semibold text-amber-950 dark:text-amber-200 hover:bg-amber-100/60 dark:hover:bg-amber-500/20 transition-colors cursor-pointer"
                       >
                         {copiedDraft ? (
                           <>
-                            <Check className="w-3.5 h-3.5 text-emerald-700" />
+                            <Check className="w-3.5 h-3.5 text-emerald-700 dark:text-emerald-400" />
                             <span>Copied Message</span>
                           </>
                         ) : (
@@ -618,25 +626,27 @@ export function ContactSection({
                   </div>
                 )}
 
-                <div className="pt-2 flex flex-wrap items-center justify-between gap-4">
-                  <button
-                    type="submit"
-                    disabled={submission.status === 'submitting'}
-                    className="inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl bg-gradient-to-r from-[#087BFF] to-[#792BFF] text-white text-sm sm:text-[15px] font-semibold shadow-[0_14px_30px_-10px_rgba(8,123,255,0.45)] hover:shadow-[0_18px_36px_-10px_rgba(121,43,255,0.5)] disabled:opacity-60 transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#087BFF] focus-visible:ring-offset-2"
-                  >
-                    <Send className="w-4 h-4" />
-                    <span>
-                      {submission.status === 'submitting'
-                        ? 'Sending Message...'
-                        : 'Submit Inquiry'}
-                    </span>
-                  </button>
+                <div className="pt-3 flex flex-wrap items-center justify-between gap-4">
+                  <Magnetic strength={0.25} cursorType="contact" cursorText="SEND">
+                    <button
+                      type="submit"
+                      disabled={submission.status === 'submitting'}
+                      className="inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#087BFF] to-[#792BFF] text-white text-sm sm:text-[15px] font-semibold shadow-[0_16px_34px_-10px_rgba(8,123,255,0.45)] hover:shadow-[0_20px_40px_-10px_rgba(121,43,255,0.55)] disabled:opacity-60 transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#087BFF] focus-visible:ring-offset-2"
+                    >
+                      <Send className="w-4 h-4" />
+                      <span>
+                        {submission.status === 'submitting'
+                          ? 'Sending Message...'
+                          : 'Submit Inquiry'}
+                      </span>
+                    </button>
+                  </Magnetic>
 
                   <a
                     href={contact.whatsappLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 hover:text-emerald-800 transition-colors"
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-300 transition-colors"
                   >
                     <MessageCircle className="w-4 h-4" />
                     <span>Or message directly on WhatsApp</span>

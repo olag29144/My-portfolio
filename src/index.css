@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-display: "Outfit", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
@@ -16,12 +18,19 @@
 }
 
 @layer base {
-  html {
+  html, body {
     font-family: var(--font-sans);
     background-color: #F5F7FA;
     color: #101426;
     scroll-behavior: smooth;
     scroll-padding-top: 5.5rem;
+    overflow-x: hidden;
+    max-width: 100vw;
+    width: 100%;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
   }
 
   h1, h2, h3, h4, .font-display {

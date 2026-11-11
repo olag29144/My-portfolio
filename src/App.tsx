@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
 import {AboutSection} from './components/AboutSection';
 import {ContactSection} from './components/ContactSection';
+import {CustomCursor} from './components/CustomCursor';
 import {ExperienceSection} from './components/ExperienceSection';
 import {Footer} from './components/Footer';
 import {HeroSection} from './components/HeroSection';
@@ -10,6 +11,8 @@ import {PortfolioSection} from './components/PortfolioSection';
 import {ServicesSection} from './components/ServicesSection';
 import {SkillsSection} from './components/SkillsSection';
 import {StudioEditorBar} from './components/StudioEditorBar';
+import {CursorProvider} from './context/CursorContext';
+import {ThemeProvider} from './context/ThemeContext';
 import {DEFAULT_PORTFOLIO_DATA} from './data/defaultPortfolio';
 import type {PortfolioData} from './types/portfolio';
 
@@ -30,7 +33,14 @@ function loadSavedPortfolio(): PortfolioData {
     if (!raw) return DEFAULT_PORTFOLIO_DATA;
     const parsed = JSON.parse(raw) as Partial<PortfolioData>;
     return {
-      about: parsed.about ?? DEFAULT_PORTFOLIO_DATA.about,
+      about: {
+        ...DEFAULT_PORTFOLIO_DATA.about,
+        ...(parsed.about ?? {}),
+        profileImageUrl:
+          parsed.about?.profileImageUrl && parsed.about.profileImageUrl.trim() !== ''
+            ? parsed.about.profileImageUrl
+            : DEFAULT_PORTFOLIO_DATA.about.profileImageUrl,
+      },
       services: parsed.services ?? DEFAULT_PORTFOLIO_DATA.services,
       projects: parsed.projects ?? DEFAULT_PORTFOLIO_DATA.projects,
       skills: parsed.skills ?? DEFAULT_PORTFOLIO_DATA.skills,
@@ -81,61 +91,66 @@ export default function App() {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F5F7FA] text-[#101426]">
-      <PageLoader />
-      <Navbar activeSection={activeSection} />
+    <ThemeProvider>
+      <CursorProvider>
+        <div className="min-h-screen w-full max-w-full overflow-x-hidden flex flex-col bg-[#F5F7FA] text-[#101426] relative selection:bg-[#087BFF]/15 selection:text-[#087BFF]">
+          <CustomCursor />
+          <PageLoader />
+          <Navbar activeSection={activeSection} />
 
-      <main className="flex-1">
-        <HeroSection />
+          <main className="flex-1 w-full max-w-full overflow-x-hidden">
+            <HeroSection />
 
-        <AboutSection
-          about={portfolio.about}
-          isEditing={isEditing}
-          onUpdate={(about) => setPortfolio((prev) => ({...prev, about}))}
-        />
+            <AboutSection
+              about={portfolio.about}
+              isEditing={isEditing}
+              onUpdate={(about) => setPortfolio((prev) => ({...prev, about}))}
+            />
 
-        <ServicesSection
-          services={portfolio.services}
-          isEditing={isEditing}
-          onUpdate={(services) => setPortfolio((prev) => ({...prev, services}))}
-        />
+            <ServicesSection
+              services={portfolio.services}
+              isEditing={isEditing}
+              onUpdate={(services) => setPortfolio((prev) => ({...prev, services}))}
+            />
 
-        <SkillsSection
-          skills={portfolio.skills}
-          isEditing={isEditing}
-          onUpdate={(skills) => setPortfolio((prev) => ({...prev, skills}))}
-        />
+            <SkillsSection
+              skills={portfolio.skills}
+              isEditing={isEditing}
+              onUpdate={(skills) => setPortfolio((prev) => ({...prev, skills}))}
+            />
 
-        <PortfolioSection
-          projects={portfolio.projects}
-          isEditing={isEditing}
-          onUpdate={(projects) => setPortfolio((prev) => ({...prev, projects}))}
-        />
+            <PortfolioSection
+              projects={portfolio.projects}
+              isEditing={isEditing}
+              onUpdate={(projects) => setPortfolio((prev) => ({...prev, projects}))}
+            />
 
-        <ExperienceSection
-          experience={portfolio.experience}
-          isEditing={isEditing}
-          onUpdate={(experience) =>
-            setPortfolio((prev) => ({...prev, experience}))
-          }
-        />
+            <ExperienceSection
+              experience={portfolio.experience}
+              isEditing={isEditing}
+              onUpdate={(experience) =>
+                setPortfolio((prev) => ({...prev, experience}))
+              }
+            />
 
-        <ContactSection
-          contact={portfolio.contact}
-          isEditing={isEditing}
-          onUpdate={(contact) => setPortfolio((prev) => ({...prev, contact}))}
-        />
-      </main>
+            <ContactSection
+              contact={portfolio.contact}
+              isEditing={isEditing}
+              onUpdate={(contact) => setPortfolio((prev) => ({...prev, contact}))}
+            />
+          </main>
 
-      <Footer email={portfolio.contact.email} />
+          <Footer email={portfolio.contact.email} />
 
-      <StudioEditorBar
-        isEditing={isEditing}
-        onToggleEditing={() => setIsEditing((prev) => !prev)}
-        data={portfolio}
-        onImport={(imported) => setPortfolio(imported)}
-        onReset={() => setPortfolio(DEFAULT_PORTFOLIO_DATA)}
-      />
-    </div>
+          <StudioEditorBar
+            isEditing={isEditing}
+            onToggleEditing={() => setIsEditing((prev) => !prev)}
+            data={portfolio}
+            onImport={(imported) => setPortfolio(imported)}
+            onReset={() => setPortfolio(DEFAULT_PORTFOLIO_DATA)}
+          />
+        </div>
+      </CursorProvider>
+    </ThemeProvider>
   );
 }

@@ -58,7 +58,7 @@ export function StudioEditorBar({
   };
 
   return (
-    <div className="fixed bottom-4 right-4 z-40 flex flex-col items-end gap-2.5 pointer-events-none">
+    <div className="fixed bottom-3 right-3 sm:bottom-4 sm:right-4 z-40 flex flex-col items-end gap-2.5 pointer-events-none max-w-[calc(100vw-1.5rem)]">
       <AnimatePresence>
         {isEditing && (
           <motion.div
@@ -66,7 +66,7 @@ export function StudioEditorBar({
             animate={{opacity: 1, y: 0, scale: 1}}
             exit={{opacity: 0, y: 10, scale: 0.96}}
             transition={{duration: 0.2, ease: [0.16, 1, 0.3, 1]}}
-            className="pointer-events-auto rounded-2xl bg-white/95 backdrop-blur-xl border border-[#101426]/12 shadow-[0_18px_48px_-12px_rgba(16,20,38,0.22)] p-3 flex flex-wrap items-center gap-2"
+            className="pointer-events-auto rounded-2xl bg-white/95 backdrop-blur-xl border border-[#101426]/12 shadow-[0_18px_48px_-12px_rgba(16,20,38,0.18)] p-2.5 sm:p-3 flex flex-wrap items-center gap-2 max-w-full"
           >
             <button
               type="button"
@@ -109,10 +109,10 @@ export function StudioEditorBar({
         type="button"
         onClick={onToggleEditing}
         aria-pressed={isEditing}
-        className={`pointer-events-auto inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold shadow-[0_12px_30px_-8px_rgba(16,20,38,0.3)] transition-all duration-200 whitespace-nowrap cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#087BFF] ${
+        className={`pointer-events-auto inline-flex items-center gap-2 px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs font-semibold shadow-[0_12px_30px_-8px_rgba(16,20,38,0.22)] transition-all duration-200 whitespace-nowrap cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#087BFF] ${
           isEditing
             ? 'bg-gradient-to-r from-[#087BFF] to-[#792BFF] text-white'
-            : 'bg-[#101426]/92 backdrop-blur-md text-white hover:bg-[#087BFF]'
+            : 'bg-[#101426] text-white hover:bg-[#087BFF]'
         }`}
       >
         {isEditing ? (

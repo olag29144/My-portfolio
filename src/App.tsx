@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
 import {AboutSection} from './components/AboutSection';
 import {ContactSection} from './components/ContactSection';
+import {ExperienceSection} from './components/ExperienceSection';
 import {Footer} from './components/Footer';
 import {HeroSection} from './components/HeroSection';
 import {Navbar} from './components/Navbar';
@@ -12,8 +13,16 @@ import {StudioEditorBar} from './components/StudioEditorBar';
 import {DEFAULT_PORTFOLIO_DATA} from './data/defaultPortfolio';
 import type {PortfolioData} from './types/portfolio';
 
-const STORAGE_KEY = 'gabby-teq-portfolio-v1';
-const SECTION_IDS = ['home', 'about', 'services', 'portfolio', 'skills', 'contact'];
+const STORAGE_KEY = 'gabby-teq-portfolio-v3';
+const SECTION_IDS = [
+  'home',
+  'about',
+  'services',
+  'skills',
+  'portfolio',
+  'experience',
+  'contact',
+];
 
 function loadSavedPortfolio(): PortfolioData {
   try {
@@ -25,6 +34,7 @@ function loadSavedPortfolio(): PortfolioData {
       services: parsed.services ?? DEFAULT_PORTFOLIO_DATA.services,
       projects: parsed.projects ?? DEFAULT_PORTFOLIO_DATA.projects,
       skills: parsed.skills ?? DEFAULT_PORTFOLIO_DATA.skills,
+      experience: parsed.experience ?? DEFAULT_PORTFOLIO_DATA.experience,
       contact: parsed.contact ?? DEFAULT_PORTFOLIO_DATA.contact,
     };
   } catch {
@@ -90,16 +100,24 @@ export default function App() {
           onUpdate={(services) => setPortfolio((prev) => ({...prev, services}))}
         />
 
+        <SkillsSection
+          skills={portfolio.skills}
+          isEditing={isEditing}
+          onUpdate={(skills) => setPortfolio((prev) => ({...prev, skills}))}
+        />
+
         <PortfolioSection
           projects={portfolio.projects}
           isEditing={isEditing}
           onUpdate={(projects) => setPortfolio((prev) => ({...prev, projects}))}
         />
 
-        <SkillsSection
-          skills={portfolio.skills}
+        <ExperienceSection
+          experience={portfolio.experience}
           isEditing={isEditing}
-          onUpdate={(skills) => setPortfolio((prev) => ({...prev, skills}))}
+          onUpdate={(experience) =>
+            setPortfolio((prev) => ({...prev, experience}))
+          }
         />
 
         <ContactSection

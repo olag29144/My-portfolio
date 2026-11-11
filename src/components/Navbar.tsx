@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {Menu, X} from 'lucide-react';
+import {Menu, MessageCircle, X} from 'lucide-react';
 import {AnimatePresence, motion} from 'motion/react';
 import {BrandMark} from './GeometricArt';
 
@@ -11,8 +11,9 @@ const NAV_ITEMS = [
   {id: 'home', label: 'Home', href: '#home'},
   {id: 'about', label: 'About', href: '#about'},
   {id: 'services', label: 'Services', href: '#services'},
-  {id: 'portfolio', label: 'Portfolio', href: '#portfolio'},
   {id: 'skills', label: 'Skills', href: '#skills'},
+  {id: 'portfolio', label: 'Projects', href: '#portfolio'},
+  {id: 'experience', label: 'Experience', href: '#experience'},
   {id: 'contact', label: 'Contact', href: '#contact'},
 ];
 
@@ -52,30 +53,35 @@ export function Navbar({activeSection}: NavbarProps) {
       <div
         className={`pointer-events-auto mx-auto max-w-6xl rounded-2xl transition-all duration-200 ${
           scrolled
-            ? 'bg-white/88 backdrop-blur-xl border border-[#101426]/10 shadow-[0_12px_36px_-12px_rgba(16,20,38,0.12)]'
-            : 'bg-white/70 backdrop-blur-md border border-white/80 shadow-[0_6px_24px_-12px_rgba(16,20,38,0.08)]'
+            ? 'bg-white/90 backdrop-blur-xl border border-[#101426]/10 shadow-[0_12px_36px_-12px_rgba(16,20,38,0.12)]'
+            : 'bg-white/75 backdrop-blur-md border border-white/80 shadow-[0_6px_24px_-12px_rgba(16,20,38,0.08)]'
         }`}
       >
-        <div className="flex items-center justify-between gap-4 lg:gap-8 px-4 sm:px-6 h-14 sm:h-16">
-          {/* Zone 1: Single-element Brand Wordmark */}
+        <div className="flex items-center justify-between gap-3 lg:gap-6 px-4 sm:px-6 h-14 sm:h-16">
+          {/* Brand Wordmark */}
           <a
             href="#home"
             onClick={(e) => {
               e.preventDefault();
               handleNavClick('#home');
             }}
-            className="flex items-center gap-2.5 text-lg font-bold tracking-tight text-[#101426] whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#087BFF] rounded-lg"
+            className="flex items-center gap-2.5 text-base sm:text-lg font-bold tracking-tight text-[#101426] whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#087BFF] rounded-lg"
           >
             <BrandMark className="w-8 h-8 shrink-0" />
-            <span className="font-display font-extrabold tracking-tight">
-              GABBY TEQ
-            </span>
+            <div className="flex flex-col">
+              <span className="font-display font-extrabold tracking-tight leading-none">
+                GABBY TEQ
+              </span>
+              <span className="text-[10px] font-mono text-[#087BFF] font-semibold tracking-normal hidden sm:block">
+                Joseph Gabriel Olaoluwa
+              </span>
+            </div>
           </a>
 
-          {/* Zone 2: Clean Single-Line Navigation Links */}
+          {/* Navigation Links */}
           <nav
             aria-label="Primary navigation"
-            className="hidden md:flex items-center gap-6 lg:gap-7 text-sm font-medium"
+            className="hidden md:flex items-center gap-5 lg:gap-6 text-sm font-medium"
           >
             {NAV_ITEMS.map((item) => {
               const isActive = activeSection === item.id;
@@ -104,17 +110,27 @@ export function Navbar({activeSection}: NavbarProps) {
             })}
           </nav>
 
-          {/* Zone 3: Primary Action + Mobile Menu Trigger */}
+          {/* Primary Action + Mobile Trigger */}
           <div className="flex items-center gap-2 shrink-0">
+            <a
+              href="https://wa.me/2347069536353"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl transition-colors duration-200 whitespace-nowrap shadow-sm"
+            >
+              <MessageCircle className="w-3.5 h-3.5" />
+              <span>WhatsApp</span>
+            </a>
+
             <a
               href="#contact"
               onClick={(e) => {
                 e.preventDefault();
                 handleNavClick('#contact');
               }}
-              className="hidden sm:inline-flex items-center justify-center px-4 py-2 text-xs sm:text-sm font-semibold text-white bg-[#101426] hover:bg-[#087BFF] rounded-xl transition-colors duration-200 whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#087BFF] focus-visible:ring-offset-2"
+              className="inline-flex items-center justify-center px-3.5 py-1.5 text-xs sm:text-sm font-semibold text-white bg-[#101426] hover:bg-[#087BFF] rounded-xl transition-colors duration-200 whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#087BFF] focus-visible:ring-offset-2"
             >
-              Let&apos;s Talk
+              Contact
             </a>
 
             <button
@@ -122,7 +138,7 @@ export function Navbar({activeSection}: NavbarProps) {
               onClick={() => setMobileOpen((prev) => !prev)}
               aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
               aria-expanded={mobileOpen}
-              className="md:hidden inline-flex items-center justify-center w-11 h-11 rounded-xl text-[#101426] hover:bg-[#101426]/6 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#087BFF]"
+              className="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-xl text-[#101426] hover:bg-[#101426]/6 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#087BFF]"
             >
               {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -150,7 +166,7 @@ export function Navbar({activeSection}: NavbarProps) {
                         e.preventDefault();
                         handleNavClick(item.href);
                       }}
-                      className={`px-4 py-3 rounded-xl text-sm font-medium transition-colors whitespace-nowrap ${
+                      className={`px-4 py-2.5 rounded-xl text-sm font-medium transition-colors whitespace-nowrap ${
                         isActive
                           ? 'bg-[#087BFF]/10 text-[#087BFF] font-semibold'
                           : 'text-[#101426]/80 hover:bg-[#F5F7FA] hover:text-[#101426]'
@@ -160,16 +176,27 @@ export function Navbar({activeSection}: NavbarProps) {
                     </a>
                   );
                 })}
-                <a
-                  href="#contact"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleNavClick('#contact');
-                  }}
-                  className="mt-2 inline-flex items-center justify-center px-4 py-3 text-sm font-semibold text-white bg-gradient-to-r from-[#087BFF] to-[#792BFF] rounded-xl whitespace-nowrap"
-                >
-                  Let&apos;s Work Together
-                </a>
+                <div className="pt-2 grid grid-cols-2 gap-2">
+                  <a
+                    href="https://wa.me/2347069536353"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 text-xs font-semibold text-white bg-emerald-600 rounded-xl"
+                  >
+                    <MessageCircle className="w-3.5 h-3.5" />
+                    <span>WhatsApp</span>
+                  </a>
+                  <a
+                    href="#contact"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleNavClick('#contact');
+                    }}
+                    className="inline-flex items-center justify-center px-3 py-2.5 text-xs font-semibold text-white bg-[#101426] rounded-xl"
+                  >
+                    Contact Form
+                  </a>
+                </div>
               </div>
             </motion.nav>
           )}

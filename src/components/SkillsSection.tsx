@@ -11,12 +11,12 @@ interface SkillsSectionProps {
 }
 
 const ICON_OPTIONS: {value: ServiceIconId; label: string}[] = [
-  {value: 'globe', label: 'Web'},
-  {value: 'layers', label: 'Branding'},
-  {value: 'penTool', label: 'Graphic'},
-  {value: 'aperture', label: 'Motion'},
-  {value: 'cpu', label: 'Tech'},
-  {value: 'compass', label: 'Strategy'},
+  {value: 'globe', label: 'Web Development'},
+  {value: 'layers', label: 'Web Design'},
+  {value: 'aperture', label: 'UI/UX Design'},
+  {value: 'penTool', label: 'Graphic Design'},
+  {value: 'cpu', label: 'Backend / APIs'},
+  {value: 'compass', label: 'Strategy / Civic Tech'},
 ];
 
 const ACCENT_OPTIONS: {value: AccentKey; label: string}[] = [
@@ -42,11 +42,12 @@ export function SkillsSection({
   const handleAddSkill = () => {
     const newSkill: SkillItem = {
       id: `skill-${Date.now()}`,
-      name: 'New Skill Area (Placeholder)',
-      percentage: 75,
+      name: 'New Technical Skill',
+      percentage: 80,
       accent: 'blueCyan',
       icon: 'globe',
-      isPlaceholder: true,
+      description: 'Describe tools, libraries, or methodologies used in this discipline.',
+      isPlaceholder: false,
     };
     onUpdate([...skills, newSkill]);
   };
@@ -65,7 +66,7 @@ export function SkillsSection({
       id="skills"
       className="relative py-20 sm:py-28 bg-[#101426] text-white overflow-hidden"
     >
-      {/* Subtle futuristic studio ambient lights */}
+      {/* Studio ambient lights */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -top-20 left-10 w-80 h-80 rounded-full bg-[#087BFF]/20 blur-3xl"
@@ -80,15 +81,14 @@ export function SkillsSection({
           {/* Left Column: Intro + Orbital Spectrum Visual */}
           <div className="lg:col-span-5">
             <p className="text-sm font-semibold tracking-wide text-[#00D5FF] mb-2.5">
-              Skills &amp; Craft Focus
+              Technical &amp; Creative Capabilities
             </p>
             <h2 className="font-display font-bold text-3xl sm:text-4xl text-white tracking-tight text-balance">
-              Creative Disciplines &amp; Editable Skill Indicators
+              Disciplines, Tooling &amp; Engineering Craft
             </h2>
             <p className="mt-4 text-sm sm:text-[15px] text-white/72 leading-relaxed">
-              The skill labels and percentages shown here are clearly marked
-              editable placeholders. Open Edit Mode to replace them with your
-              real capabilities and custom proficiency percentages.
+              Combining modern frontend development, backend logic, and user-centered
+              visual design to create responsive, reliable, and aesthetically refined products.
             </p>
 
             {/* Orbital Spectrum Ring Visualization */}
@@ -97,7 +97,7 @@ export function SkillsSection({
                 viewBox="0 0 260 260"
                 className="w-full h-full -rotate-90"
                 role="img"
-                aria-label="Editable skill focus orbital spectrum"
+                aria-label="Skill proficiency spectrum"
               >
                 {skills.slice(0, 5).map((skill, idx) => {
                   const radius = 112 - idx * 16;
@@ -149,14 +149,14 @@ export function SkillsSection({
                   {averageLevel}%
                 </span>
                 <span className="mt-1 text-[11px] font-medium tracking-wide text-white/60">
-                  Placeholder Avg
+                  Proficiency Index
                 </span>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Animated Editable Skill Progress List */}
-          <div className="lg:col-span-7 space-y-5">
+          {/* Right Column: Skill Progress List */}
+          <div className="lg:col-span-7 space-y-4">
             {skills.map((skill, idx) => {
               const theme =
                 ACCENT_GRADIENTS[skill.accent] || ACCENT_GRADIENTS.blueCyan;
@@ -167,7 +167,7 @@ export function SkillsSection({
                   key={skill.id}
                   className="rounded-2xl bg-white/[0.05] border border-white/10 p-4 sm:p-5 backdrop-blur-md"
                 >
-                  <div className="flex items-center justify-between gap-4 mb-3">
+                  <div className="flex items-center justify-between gap-4 mb-2">
                     <div className="flex items-center gap-3 min-w-0">
                       <div
                         className={`w-9 h-9 rounded-lg bg-gradient-to-br ${theme.gradient} flex items-center justify-center text-white shrink-0`}
@@ -201,8 +201,14 @@ export function SkillsSection({
                     </span>
                   </div>
 
-                  {/* Animated Progress Track using compositor-only scaleX */}
-                  <div className="h-2.5 w-full rounded-full bg-white/10 overflow-hidden">
+                  {skill.description && !isEditing && (
+                    <p className="text-xs text-white/65 mb-3 pl-12">
+                      {skill.description}
+                    </p>
+                  )}
+
+                  {/* Progress Track */}
+                  <div className="h-2 w-full rounded-full bg-white/10 overflow-hidden">
                     <motion.div
                       initial={prefersReduced ? false : {scaleX: 0}}
                       whileInView={{scaleX: clamped / 100}}
@@ -220,7 +226,7 @@ export function SkillsSection({
 
                   {isEditing && (
                     <div className="mt-3 pt-3 border-t border-white/10 grid grid-cols-1 sm:grid-cols-12 gap-2.5 items-center">
-                      <div className="sm:col-span-5 flex items-center gap-2">
+                      <div className="sm:col-span-4 flex items-center gap-2">
                         <input
                           type="range"
                           min={0}
@@ -234,40 +240,20 @@ export function SkillsSection({
                           aria-label={`${skill.name} percentage slider`}
                           className="w-full accent-[#00D5FF] cursor-pointer"
                         />
-                        <input
-                          type="number"
-                          min={0}
-                          max={100}
-                          value={clamped}
-                          onChange={(e) =>
-                            updateSkill(skill.id, {
-                              percentage: Math.min(
-                                100,
-                                Math.max(0, Number(e.target.value) || 0),
-                              ),
-                            })
-                          }
-                          aria-label={`${skill.name} percentage input`}
-                          className="w-16 text-xs font-mono tabular-nums text-white bg-white/10 border border-white/20 rounded-lg px-2 py-1 text-center"
-                        />
+                        <span className="font-mono text-xs text-white/80 w-8 text-right">
+                          {clamped}%
+                        </span>
                       </div>
 
-                      <select
-                        value={skill.icon}
+                      <input
+                        type="text"
+                        value={skill.description || ''}
                         onChange={(e) =>
-                          updateSkill(skill.id, {
-                            icon: e.target.value as ServiceIconId,
-                          })
+                          updateSkill(skill.id, {description: e.target.value})
                         }
-                        aria-label="Skill icon"
-                        className="sm:col-span-3 text-xs bg-[#181E38] border border-white/20 text-white rounded-lg px-2 py-1.5"
-                      >
-                        {ICON_OPTIONS.map((opt) => (
-                          <option key={opt.value} value={opt.value}>
-                            {opt.label}
-                          </option>
-                        ))}
-                      </select>
+                        placeholder="Short description"
+                        className="sm:col-span-4 text-xs bg-[#181E38] border border-white/20 text-white rounded-lg px-2 py-1.5"
+                      />
 
                       <select
                         value={skill.accent}
@@ -307,7 +293,7 @@ export function SkillsSection({
                 className="w-full py-3 rounded-xl border border-dashed border-white/25 text-sm font-semibold text-white/85 hover:text-white hover:border-[#00D5FF] transition-colors inline-flex items-center justify-center gap-2 cursor-pointer"
               >
                 <Plus className="w-4 h-4" />
-                <span>Add Skill Indicator</span>
+                <span>Add Skill Capability</span>
               </button>
             )}
           </div>

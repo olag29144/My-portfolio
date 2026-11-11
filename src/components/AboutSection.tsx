@@ -1,5 +1,5 @@
 import {useRef} from 'react';
-import {ImagePlus, Trash2} from 'lucide-react';
+import {ImagePlus, MapPin, MessageCircle, Trash2} from 'lucide-react';
 import {motion, useReducedMotion} from 'motion/react';
 import type {AboutData} from '../types/portfolio';
 import {ProfilePlaceholderArt} from './GeometricArt';
@@ -85,7 +85,7 @@ export function AboutSection({about, isEditing, onUpdate}: AboutSectionProps) {
               <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[18px]">
                 <ProfilePlaceholderArt
                   imageUrl={about.profileImageUrl}
-                  alt="Gabby Teq studio profile portrait"
+                  alt="Joseph Gabriel Olaoluwa (GABBY TEQ) studio portrait"
                 />
               </div>
 
@@ -110,7 +110,7 @@ export function AboutSection({about, isEditing, onUpdate}: AboutSectionProps) {
                           className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-white border border-[#101426]/12 text-xs font-medium text-[#101426]/80 hover:text-red-600 transition-colors cursor-pointer"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
-                          <span>Use Placeholder</span>
+                          <span>Reset Avatar</span>
                         </button>
                       )}
                       <input
@@ -142,15 +142,19 @@ export function AboutSection({about, isEditing, onUpdate}: AboutSectionProps) {
                     />
                   </div>
                 ) : (
-                  <p className="text-xs text-[#101426]/60 leading-relaxed">
-                    {about.profileCaption}
-                  </p>
+                  <div className="flex items-center justify-between text-xs text-[#101426]/70 leading-relaxed pt-1">
+                    <span>{about.profileCaption}</span>
+                    <span className="inline-flex items-center gap-1 font-semibold text-[#087BFF] shrink-0 ml-2">
+                      <MapPin className="w-3.5 h-3.5" />
+                      Nigeria
+                    </span>
+                  </div>
                 )}
               </div>
             </div>
           </motion.div>
 
-          {/* Right Column: Editable Introduction & Biography */}
+          {/* Right Column: Authentic Introduction & Biography */}
           <motion.div
             initial={prefersReduced ? false : {opacity: 0, y: 20}}
             whileInView={{opacity: 1, y: 0}}
@@ -158,9 +162,17 @@ export function AboutSection({about, isEditing, onUpdate}: AboutSectionProps) {
             transition={{duration: 0.55, delay: 0.08, ease: [0.16, 1, 0.3, 1]}}
             className="lg:col-span-7"
           >
-            <p className="text-sm font-semibold text-[#792BFF] mb-3">
-              About Gabby Teq
-            </p>
+            <div className="flex flex-wrap items-center gap-2 mb-3">
+              <span className="text-sm font-semibold text-[#792BFF]">
+                About Me
+              </span>
+              <span aria-hidden="true" className="text-[#101426]/20">
+                ·
+              </span>
+              <span className="text-xs font-mono font-medium text-[#101426]/60">
+                Brand: GABBY TEQ
+              </span>
+            </div>
 
             {isEditing ? (
               <input
@@ -177,14 +189,14 @@ export function AboutSection({about, isEditing, onUpdate}: AboutSectionProps) {
             )}
 
             {/* Short Personal Introduction */}
-            <div className="mt-6">
+            <div className="mt-5">
               {isEditing ? (
                 <div className="space-y-1.5">
                   <label className="block text-xs font-semibold text-[#101426]/65">
-                    Short Personal Introduction
+                    Personal Introduction
                   </label>
                   <textarea
-                    rows={2}
+                    rows={3}
                     value={about.intro}
                     onChange={(e) => onUpdate({...about, intro: e.target.value})}
                     className="w-full text-base sm:text-lg font-medium text-[#101426] bg-[#F5F7FA] border border-[#101426]/15 rounded-xl px-4 py-3 leading-relaxed focus:outline-none focus:ring-2 focus:ring-[#087BFF]"
@@ -197,15 +209,15 @@ export function AboutSection({about, isEditing, onUpdate}: AboutSectionProps) {
               )}
             </div>
 
-            {/* Editable Biography Area */}
-            <div className="mt-5">
+            {/* Biography Area */}
+            <div className="mt-4">
               {isEditing ? (
                 <div className="space-y-1.5">
                   <label className="block text-xs font-semibold text-[#101426]/65">
-                    Editable Biography (Background, Experience &amp; Passion)
+                    Professional Biography
                   </label>
                   <textarea
-                    rows={4}
+                    rows={5}
                     value={about.biography}
                     onChange={(e) =>
                       onUpdate({...about, biography: e.target.value})
@@ -214,13 +226,28 @@ export function AboutSection({about, isEditing, onUpdate}: AboutSectionProps) {
                   />
                 </div>
               ) : (
-                <p className="text-[15px] sm:text-base text-[#101426]/72 leading-relaxed max-w-2xl">
+                <p className="text-[15px] sm:text-base text-[#101426]/75 leading-relaxed max-w-2xl">
                   {about.biography}
                 </p>
               )}
             </div>
 
-            {/* Clean Architectural Focus Pillars (separated with hairline dividers, no left-border stripes) */}
+            <div className="mt-6 flex flex-wrap items-center gap-3">
+              <a
+                href="https://wa.me/2347069536353"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold transition-colors shadow-sm"
+              >
+                <MessageCircle className="w-4 h-4" />
+                <span>Message on WhatsApp</span>
+              </a>
+              <span className="text-xs text-[#101426]/60">
+                Direct phone: 07069536353
+              </span>
+            </div>
+
+            {/* Architectural Focus Pillars */}
             <div className="mt-9 pt-8 border-t border-[#101426]/10 grid grid-cols-1 sm:grid-cols-3 gap-6">
               {about.focusPillars.map((pillar, idx) => (
                 <div key={pillar.id} className="space-y-2">

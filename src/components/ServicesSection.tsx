@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {Plus, Trash2} from 'lucide-react';
+import {CheckCircle, Plus, Trash2} from 'lucide-react';
 import {motion, useReducedMotion} from 'motion/react';
 import {ACCENT_GRADIENTS} from '../data/defaultPortfolio';
 import type {AccentKey, ServiceIconId, ServiceItem} from '../types/portfolio';
@@ -14,8 +14,8 @@ interface ServicesSectionProps {
 const ICON_OPTIONS: {value: ServiceIconId; label: string}[] = [
   {value: 'globe', label: 'Globe (Web)'},
   {value: 'penTool', label: 'Pen Tool (Graphic)'},
-  {value: 'layers', label: 'Layers (Branding)'},
-  {value: 'aperture', label: 'Aperture (Creativity)'},
+  {value: 'layers', label: 'Layers (Web Design)'},
+  {value: 'aperture', label: 'Aperture (UI/UX)'},
   {value: 'cpu', label: 'CPU (Technology)'},
   {value: 'compass', label: 'Compass (Consultation)'},
 ];
@@ -51,7 +51,7 @@ function ServiceCard({
     const rect = e.currentTarget.getBoundingClientRect();
     const px = (e.clientX - rect.left) / rect.width - 0.5;
     const py = (e.clientY - rect.top) / rect.height - 0.5;
-    setTilt({rotateX: -py * 7, rotateY: px * 7});
+    setTilt({rotateX: -py * 6, rotateY: px * 6});
   };
 
   const handlePointerLeave = () => {
@@ -65,7 +65,7 @@ function ServiceCard({
       viewport={{once: true, margin: '-60px'}}
       transition={{
         duration: 0.45,
-        delay: Math.min(index * 0.06, 0.3),
+        delay: Math.min(index * 0.08, 0.3),
         ease: [0.16, 1, 0.3, 1],
       }}
       onPointerMove={handlePointerMove}
@@ -74,12 +74,12 @@ function ServiceCard({
         transform: `perspective(950px) rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg)`,
         transition: 'transform 180ms cubic-bezier(0.16, 1, 0.3, 1)',
       }}
-      className={`group relative rounded-2xl bg-white border border-[#101426]/8 p-6 sm:p-7 shadow-[0_12px_36px_-18px_rgba(16,20,38,0.12)] hover:shadow-[0_24px_48px_-18px_rgba(8,123,255,0.18)] ${theme.borderHover} transition-shadow duration-200 overflow-hidden flex flex-col justify-between`}
+      className={`group relative rounded-2xl bg-white border border-[#101426]/8 p-6 sm:p-7 shadow-[0_12px_36px_-18px_rgba(16,20,38,0.12)] hover:shadow-[0_24px_48px_-18px_rgba(8,123,255,0.18)] ${theme.borderHover} transition-all duration-200 overflow-hidden flex flex-col justify-between`}
     >
       {/* Top hairline gradient accent */}
       <div
         aria-hidden="true"
-        className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${theme.gradient} opacity-75 group-hover:opacity-100 transition-opacity`}
+        className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${theme.gradient} opacity-85 group-hover:opacity-100 transition-opacity`}
       />
 
       <div>
@@ -90,8 +90,8 @@ function ServiceCard({
             <ServiceLucideIcon icon={service.icon} className="w-5 h-5" />
           </div>
 
-          <span className="font-mono text-xs font-medium tabular-nums text-[#101426]/45">
-            {String(index + 1).padStart(2, '0')}.
+          <span className="font-mono text-xs font-semibold tabular-nums text-[#101426]/40">
+            0{index + 1}.
           </span>
         </div>
 
@@ -105,14 +105,30 @@ function ServiceCard({
               className="w-full font-display font-bold text-lg text-[#101426] bg-[#F5F7FA] border border-[#101426]/15 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#087BFF]"
             />
             <textarea
-              rows={3}
+              rows={2}
               value={service.description}
               onChange={(e) =>
                 onChange({...service, description: e.target.value})
               }
               aria-label="Service description"
-              className="w-full text-sm text-[#101426]/80 bg-[#F5F7FA] border border-[#101426]/15 rounded-lg px-3 py-2 leading-relaxed focus:outline-none focus:ring-2 focus:ring-[#087BFF]"
+              className="w-full text-xs text-[#101426]/80 bg-[#F5F7FA] border border-[#101426]/15 rounded-lg px-3 py-2 leading-relaxed focus:outline-none focus:ring-2 focus:ring-[#087BFF]"
             />
+            <div className="space-y-1">
+              <label className="block text-[11px] font-semibold text-[#101426]/60">
+                Features / Capabilities (one per line):
+              </label>
+              <textarea
+                rows={4}
+                value={(service.features || []).join('\n')}
+                onChange={(e) =>
+                  onChange({
+                    ...service,
+                    features: e.target.value.split('\n').filter(Boolean),
+                  })
+                }
+                className="w-full text-xs text-[#101426]/80 bg-[#F5F7FA] border border-[#101426]/15 rounded-lg px-2.5 py-1.5 font-mono"
+              />
+            </div>
             <div className="grid grid-cols-2 gap-2">
               <select
                 value={service.icon}
@@ -155,13 +171,36 @@ function ServiceCard({
         ) : (
           <>
             <h3 className="font-display font-bold text-xl text-[#101426] tracking-tight mb-2.5">
-              {String(index + 1).padStart(2, '0')}. {service.title}
+              {service.title}
             </h3>
-            <p className="text-sm sm:text-[15px] text-[#101426]/70 leading-relaxed">
+            <p className="text-sm text-[#101426]/72 leading-relaxed mb-4">
               {service.description}
             </p>
+
+            {service.features && service.features.length > 0 && (
+              <ul className="space-y-2 pt-3 border-t border-[#101426]/8">
+                {service.features.map((feature, fIdx) => (
+                  <li
+                    key={`${service.id}-f-${fIdx}`}
+                    className="flex items-start gap-2 text-xs sm:text-[13px] text-[#101426]/80 font-medium"
+                  >
+                    <CheckCircle className="w-3.5 h-3.5 text-[#087BFF] shrink-0 mt-0.5" />
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
           </>
         )}
+      </div>
+
+      <div className="pt-5 mt-4 border-t border-[#101426]/6">
+        <a
+          href="#contact"
+          className="inline-flex items-center text-xs font-semibold text-[#087BFF] hover:text-[#792BFF] transition-colors"
+        >
+          <span>Inquire About {service.title} &rarr;</span>
+        </a>
       </div>
     </motion.article>
   );
@@ -184,11 +223,11 @@ export function ServicesSection({
   const handleAddService = () => {
     const newItem: ServiceItem = {
       id: `srv-${Date.now()}`,
-      title: 'New Custom Service',
-      description:
-        'Describe your custom creative or technical service offering here.',
+      title: 'New Service',
+      description: 'Describe the new creative or technical service offering here.',
       icon: 'globe',
       accent: 'blueCyan',
+      features: ['Feature 1', 'Feature 2'],
     };
     onUpdate([...services, newItem]);
   };
@@ -202,20 +241,20 @@ export function ServicesSection({
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div className="max-w-2xl">
             <p className="text-sm font-semibold text-[#087BFF] mb-2.5">
-              Services &amp; Capabilities
+              Professional Services
             </p>
             <h2 className="font-display font-bold text-3xl sm:text-4xl text-[#101426] tracking-tight text-balance">
-              Creative Solutions Crafted for Modern Digital Brands
+              End-to-End Web, UI/UX &amp; Creative Design Solutions
             </h2>
           </div>
 
-          <p className="text-sm text-[#101426]/65 max-w-sm">
-            Every service card is customizable so you can tailor titles,
-            descriptions, icons, and gradient accents to match your studio focus.
+          <p className="text-sm text-[#101426]/65 max-w-sm leading-relaxed">
+            From modern responsive websites to comprehensive brand systems and
+            interactive application interfaces tailored for businesses and creators.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
           {services.map((service, index) => (
             <ServiceCard
               key={service.id}

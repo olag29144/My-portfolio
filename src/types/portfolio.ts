@@ -35,6 +35,11 @@ export interface AboutData {
   profileImageUrl: string;
   profileCaption: string;
   focusPillars: FocusPillar[];
+  fullName?: string;
+  brand?: string;
+  title?: string;
+  location?: string;
+  brandStatement?: string;
 }
 
 export interface ServiceItem {
@@ -43,6 +48,7 @@ export interface ServiceItem {
   description: string;
   icon: ServiceIconId;
   accent: AccentKey;
+  features?: string[];
 }
 
 export interface ProjectItem {
@@ -56,6 +62,8 @@ export interface ProjectItem {
   liveUrl: string;
   tools: string[];
   isPlaceholder: boolean;
+  status: string;
+  features?: string[];
 }
 
 export interface SkillItem {
@@ -65,6 +73,7 @@ export interface SkillItem {
   accent: AccentKey;
   icon: ServiceIconId;
   isPlaceholder: boolean;
+  description?: string;
 }
 
 export interface SocialLink {
@@ -74,10 +83,27 @@ export interface SocialLink {
   url: string;
 }
 
+export interface ExperienceItem {
+  id: string;
+  period: string;
+  role: string;
+  organization: string;
+  location: string;
+  description: string;
+  highlights: string[];
+  tag: string;
+}
+
 export interface ContactInfo {
   heading: string;
   description: string;
+  fullName: string;
+  brand: string;
+  title: string;
   email: string;
+  whatsappNumber: string;
+  whatsappLink: string;
+  githubUrl: string;
   locationNote: string;
   socialLinks: SocialLink[];
 }
@@ -87,5 +113,6 @@ export interface PortfolioData {
   services: ServiceItem[];
   projects: ProjectItem[];
   skills: SkillItem[];
+  experience: ExperienceItem[];
   contact: ContactInfo;
 }

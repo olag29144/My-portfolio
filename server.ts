@@ -58,7 +58,9 @@ async function sendViaSmtp(payload: ContactPayload): Promise<void> {
   });
 
   const toAddress =
-    process.env.CONTACT_TO_EMAIL || process.env.SMTP_USER || '';
+    process.env.CONTACT_TO_EMAIL ||
+    process.env.SMTP_USER ||
+    'olag29144@gmail.com';
   const fromAddress =
     process.env.CONTACT_FROM_EMAIL ||
     `GABBY TEQ Portfolio <${process.env.SMTP_USER}>`;
@@ -80,7 +82,7 @@ async function sendViaSmtp(payload: ContactPayload): Promise<void> {
 
 async function sendViaResend(payload: ContactPayload): Promise<void> {
   const apiKey = process.env.RESEND_API_KEY || '';
-  const toAddress = process.env.CONTACT_TO_EMAIL || '';
+  const toAddress = process.env.CONTACT_TO_EMAIL || 'olag29144@gmail.com';
   const fromAddress =
     process.env.CONTACT_FROM_EMAIL ||
     'GABBY TEQ Portfolio <onboarding@resend.dev>';

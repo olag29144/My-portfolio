@@ -1,5 +1,5 @@
 import {useEffect, useRef, useState} from 'react';
-import {ArrowRight, Compass} from 'lucide-react';
+import {ArrowRight, Compass, MessageCircle} from 'lucide-react';
 import {motion, useReducedMotion} from 'motion/react';
 
 const HERO_VIDEO_SRC =
@@ -7,12 +7,14 @@ const HERO_VIDEO_SRC =
 const HERO_POSTER_SRC = '/assets/hero-poster.jpg';
 
 const MARQUEE_ITEMS = [
-  'Web Design & Development',
+  'Web Development',
+  'Web Design',
   'Graphic Design',
-  'Branding & Visual Identity',
-  'Digital Creativity',
-  'Technology Solutions',
-  'Creative Consultation',
+  'UI/UX Design',
+  'GABBY TEQ',
+  'Turning Ideas Into Digital Experiences',
+  'Nigeria',
+  'Creative Solutions',
 ];
 
 export function HeroSection() {
@@ -63,70 +65,89 @@ export function HeroSection() {
       {/* Ambient studio atmosphere */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-24 -left-24 w-[420px] h-[420px] rounded-full bg-[#00D5FF]/14 blur-3xl"
+        className="pointer-events-none absolute -top-24 -left-24 w-[440px] h-[440px] rounded-full bg-[#00D5FF]/14 blur-3xl"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute top-16 right-0 w-[460px] h-[460px] rounded-full bg-[#792BFF]/10 blur-3xl"
+        className="pointer-events-none absolute top-16 right-0 w-[480px] h-[480px] rounded-full bg-[#792BFF]/10 blur-3xl"
       />
 
       <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 items-center gap-10 lg:gap-12">
           {/* Left Column: Typographic Hierarchy & CTAs */}
           <div className="lg:col-span-5 flex flex-col items-start">
-            <motion.p
+            <motion.div
               initial={prefersReduced ? false : {opacity: 0, y: 12}}
               animate={{opacity: 1, y: 0}}
               transition={{duration: 0.45, ease: [0.16, 1, 0.3, 1]}}
-              className="text-sm sm:text-[15px] font-semibold tracking-tight text-[#087BFF] mb-4"
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#087BFF]/10 border border-[#087BFF]/20 text-[#087BFF] text-xs font-semibold tracking-wide uppercase mb-4"
             >
-              Creative Thinker. Digital Innovator. Technology Enthusiast.
-            </motion.p>
+              <span className="w-2 h-2 rounded-full bg-[#087BFF] animate-pulse" />
+              <span>GABBY TEQ • NIGERIA</span>
+            </motion.div>
 
             <motion.h1
               initial={prefersReduced ? false : {opacity: 0, y: 16}}
               animate={{opacity: 1, y: 0}}
               transition={{duration: 0.5, delay: 0.08, ease: [0.16, 1, 0.3, 1]}}
-              className="font-display font-extrabold text-[#101426] tracking-tight leading-[1.06] text-balance text-4xl sm:text-5xl lg:text-[3.5rem]"
+              className="font-display font-extrabold text-[#101426] tracking-tight leading-[1.08] text-balance text-4xl sm:text-5xl lg:text-[3.25rem]"
             >
-              Hello, I&apos;m{' '}
+              Joseph Gabriel{' '}
               <span className="bg-gradient-to-r from-[#087BFF] via-[#792BFF] to-[#E83DCE] bg-clip-text text-transparent">
-                Gabby Teq.
+                Olaoluwa.
               </span>
             </motion.h1>
 
             <motion.p
+              initial={prefersReduced ? false : {opacity: 0, y: 14}}
+              animate={{opacity: 1, y: 0}}
+              transition={{duration: 0.5, delay: 0.14, ease: [0.16, 1, 0.3, 1]}}
+              className="mt-3 text-sm sm:text-base font-semibold text-[#087BFF]"
+            >
+              Web Developer | Creative Designer | UI/UX Designer
+            </motion.p>
+
+            <motion.p
               initial={prefersReduced ? false : {opacity: 0, y: 16}}
               animate={{opacity: 1, y: 0}}
-              transition={{duration: 0.5, delay: 0.16, ease: [0.16, 1, 0.3, 1]}}
-              className="mt-5 text-base sm:text-lg leading-relaxed text-[#101426]/75 max-w-xl"
+              transition={{duration: 0.5, delay: 0.18, ease: [0.16, 1, 0.3, 1]}}
+              className="mt-4 text-base sm:text-lg leading-relaxed text-[#101426]/75 max-w-xl font-medium"
             >
-              I turn ideas into beautiful digital experiences through creativity,
-              technology, and innovation.
+              Turning ideas into functional, visually appealing, and user-friendly digital products.
             </motion.p>
 
             <motion.div
               initial={prefersReduced ? false : {opacity: 0, y: 16}}
               animate={{opacity: 1, y: 0}}
               transition={{duration: 0.5, delay: 0.24, ease: [0.16, 1, 0.3, 1]}}
-              className="mt-8 flex flex-wrap items-center gap-3.5"
+              className="mt-8 flex flex-wrap items-center gap-3"
             >
               <button
                 type="button"
                 onClick={() => scrollToSection('#portfolio')}
-                className="group inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl bg-[#101426] text-white font-semibold text-sm sm:text-[15px] shadow-[0_14px_30px_-10px_rgba(16,20,38,0.38)] hover:bg-[#087BFF] hover:shadow-[0_16px_34px_-10px_rgba(8,123,255,0.45)] transition-all duration-200 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#087BFF] focus-visible:ring-offset-2"
+                className="group inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-[#101426] text-white font-semibold text-sm sm:text-[15px] shadow-[0_14px_30px_-10px_rgba(16,20,38,0.38)] hover:bg-[#087BFF] hover:shadow-[0_16px_34px_-10px_rgba(8,123,255,0.45)] transition-all duration-200 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#087BFF] focus-visible:ring-offset-2"
               >
-                <span>Explore My Work</span>
+                <span>Explore Projects</span>
                 <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5" />
               </button>
+
+              <a
+                href="https://wa.me/2347069536353"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm sm:text-[15px] shadow-[0_14px_28px_-10px_rgba(16,185,129,0.4)] transition-all duration-200 whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
+              >
+                <MessageCircle className="w-4 h-4" />
+                <span>Chat on WhatsApp</span>
+              </a>
 
               <button
                 type="button"
                 onClick={() => scrollToSection('#contact')}
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-white text-[#101426] border border-[#101426]/14 font-semibold text-sm sm:text-[15px] hover:border-[#792BFF]/50 hover:text-[#792BFF] shadow-sm transition-all duration-200 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#792BFF] focus-visible:ring-offset-2"
+                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white text-[#101426] border border-[#101426]/14 font-semibold text-sm sm:text-[15px] hover:border-[#792BFF]/50 hover:text-[#792BFF] shadow-sm transition-all duration-200 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#792BFF] focus-visible:ring-offset-2"
               >
                 <Compass className="w-4 h-4 text-[#FF8A24]" />
-                <span>Let&apos;s Work Together</span>
+                <span>Contact Me</span>
               </button>
             </motion.div>
           </div>
@@ -138,7 +159,7 @@ export function HeroSection() {
             transition={{duration: 0.6, delay: 0.12, ease: [0.16, 1, 0.3, 1]}}
             className="lg:col-span-7 relative"
           >
-            {/* Subtle glowing Blue, Purple, and Magenta background aura around the video */}
+            {/* Glowing background aura */}
             <div
               aria-hidden="true"
               className="pointer-events-none absolute -inset-4 sm:-inset-7 rounded-[40px] bg-gradient-to-tr from-[#087BFF]/28 via-[#792BFF]/24 to-[#E83DCE]/26 blur-2xl opacity-90"
@@ -175,7 +196,7 @@ export function HeroSection() {
                 {videoFailed ? (
                   <img
                     src={HERO_POSTER_SRC}
-                    alt="GABBY TEQ 3D animated studio identity"
+                    alt="Joseph Gabriel Olaoluwa (GABBY TEQ) animated studio identity"
                     className="w-full h-full object-cover"
                   />
                 ) : (
@@ -188,7 +209,7 @@ export function HeroSection() {
                     loop
                     playsInline
                     preload="auto"
-                    aria-label="GABBY TEQ animated brand introduction video"
+                    aria-label="Joseph Gabriel Olaoluwa (GABBY TEQ) animated brand introduction video"
                     onError={() => setVideoFailed(true)}
                     className="w-full h-full object-cover block select-none pointer-events-none"
                   />
@@ -200,7 +221,7 @@ export function HeroSection() {
 
         {/* Studio Discipline Marquee Ribbon Divider */}
         <div className="mt-14 sm:mt-16 overflow-hidden border-y border-[#101426]/8 py-4">
-          <div className="animate-gabby-marquee flex items-center gap-8 text-xs sm:text-sm font-medium text-[#101426]/60 whitespace-nowrap">
+          <div className="animate-gabby-marquee flex items-center gap-8 text-xs sm:text-sm font-medium text-[#101426]/65 whitespace-nowrap">
             {[...MARQUEE_ITEMS, ...MARQUEE_ITEMS].map((item, idx) => (
               <div key={`${item}-${idx}`} className="flex items-center gap-8">
                 <span>{item}</span>

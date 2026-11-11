@@ -1,6 +1,7 @@
 import {useRef} from 'react';
 import {Check, Download, Edit3, RotateCcw, Upload} from 'lucide-react';
 import {AnimatePresence, motion} from 'motion/react';
+import {DEFAULT_PORTFOLIO_DATA} from '../data/defaultPortfolio';
 import type {PortfolioData} from '../types/portfolio';
 
 interface StudioEditorBarProps {
@@ -41,7 +42,11 @@ export function StudioEditorBar({
         if (typeof reader.result === 'string') {
           const parsed = JSON.parse(reader.result) as PortfolioData;
           if (parsed && parsed.about && parsed.services && parsed.projects) {
-            onImport(parsed);
+            onImport({
+              ...DEFAULT_PORTFOLIO_DATA,
+              ...parsed,
+              experience: parsed.experience ?? DEFAULT_PORTFOLIO_DATA.experience,
+            });
           }
         }
       } catch {

@@ -5,8 +5,11 @@ import {
   CheckCircle2,
   Copy,
   ExternalLink,
+  Github,
   Mail,
   MapPin,
+  MessageCircle,
+  Phone,
   Plus,
   Send,
   Trash2,
@@ -43,6 +46,7 @@ export function ContactSection({
     null,
   );
   const [copiedEmail, setCopiedEmail] = useState(false);
+  const [copiedPhone, setCopiedPhone] = useState(false);
   const [copiedDraft, setCopiedDraft] = useState(false);
   const prefersReduced = useReducedMotion();
 
@@ -64,9 +68,9 @@ export function ContactSection({
   }, []);
 
   const mailtoHref = `mailto:${encodeURIComponent(contact.email)}?subject=${encodeURIComponent(
-    subject || 'Portfolio Project Inquiry',
+    subject || 'GABBY TEQ — Project Inquiry',
   )}&body=${encodeURIComponent(
-    `Name: ${name}\nReply Email: ${email}\n\n${message}`,
+    `Name: ${name}\nEmail: ${email}\n\n${message}`,
   )}`;
 
   const handleCopyEmail = async () => {
@@ -75,7 +79,17 @@ export function ContactSection({
       setCopiedEmail(true);
       window.setTimeout(() => setCopiedEmail(false), 2000);
     } catch {
-      // Clipboard fallback ignored when blocked
+      // Fallback ignored
+    }
+  };
+
+  const handleCopyPhone = async () => {
+    try {
+      await navigator.clipboard.writeText(contact.whatsappNumber);
+      setCopiedPhone(true);
+      window.setTimeout(() => setCopiedPhone(false), 2000);
+    } catch {
+      // Fallback ignored
     }
   };
 
@@ -86,7 +100,7 @@ export function ContactSection({
       setCopiedDraft(true);
       window.setTimeout(() => setCopiedDraft(false), 2200);
     } catch {
-      // Clipboard fallback ignored when blocked
+      // Fallback ignored
     }
   };
 
@@ -95,7 +109,7 @@ export function ContactSection({
     if (!name.trim() || !email.trim() || !subject.trim() || !message.trim()) {
       setSubmission({
         status: 'error',
-        message: 'Please complete your name, email, subject, and message.',
+        message: 'Please fill out your full name, email address, subject, and message.',
       });
       return;
     }
@@ -134,8 +148,7 @@ export function ContactSection({
         setSubmission({
           status: 'unconfigured',
           message:
-            data?.error ||
-            'Direct server email delivery is not configured yet. Send your inquiry directly using your email app or copy your message below.',
+            'Direct server email delivery is not configured on this host. You can chat directly on WhatsApp or launch your email client below.',
         });
         return;
       }
@@ -144,13 +157,13 @@ export function ContactSection({
         status: 'error',
         message:
           data?.error ||
-          'Unable to send your message through the server right now. You can still use your email app below.',
+          'Unable to deliver through the server endpoint right now. Please use WhatsApp or your email client.',
       });
     } catch {
       setSubmission({
         status: 'error',
         message:
-          'Network error while reaching the contact endpoint. You can send directly using your email app below.',
+          'Network error while reaching the server. Please chat on WhatsApp or use your email client.',
       });
     }
   };
@@ -171,8 +184,8 @@ export function ContactSection({
         ...contact.socialLinks,
         {
           id: `soc-${Date.now()}`,
-          platform: 'Website',
-          handle: 'gabbyteq.com',
+          platform: 'Social',
+          handle: '@gabbyteq',
           url: 'https://example.com',
         },
       ],
@@ -191,7 +204,7 @@ export function ContactSection({
       id="contact"
       className="relative py-20 sm:py-28 bg-[#F5F7FA] overflow-hidden"
     >
-      {/* Subtle soft gradient highlights */}
+      {/* Background ambient highlights */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -bottom-20 -left-16 w-96 h-96 rounded-full bg-[#087BFF]/10 blur-3xl"
@@ -203,7 +216,7 @@ export function ContactSection({
 
       <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
-          {/* Left Column: Heading, Editable Email, Editable Social Links */}
+          {/* Left Column: Authentic Identity, WhatsApp & Social Links */}
           <motion.div
             initial={prefersReduced ? false : {opacity: 0, y: 18}}
             whileInView={{opacity: 1, y: 0}}
@@ -212,21 +225,73 @@ export function ContactSection({
             className="lg:col-span-5"
           >
             <p className="text-sm font-semibold text-[#FF8A24] mb-2.5">
-              Start a Conversation
+              Contact &amp; Collaboration
             </p>
             <h2 className="font-display font-bold text-3xl sm:text-4xl text-[#101426] tracking-tight text-balance">
               {contact.heading}
             </h2>
-            <p className="mt-4 text-base text-[#101426]/72 leading-relaxed max-w-md">
+            <p className="mt-3 text-base text-[#101426]/75 leading-relaxed max-w-md">
               {contact.description}
             </p>
 
-            {/* Direct Editable Email Card */}
-            <div className="mt-8 rounded-2xl bg-white border border-[#101426]/8 p-5 sm:p-6 shadow-[0_12px_36px_-18px_rgba(16,20,38,0.1)] space-y-4">
+            {/* Direct WhatsApp Action Card */}
+            <div className="mt-8 rounded-2xl bg-gradient-to-br from-emerald-600 to-teal-700 text-white p-5 sm:p-6 shadow-[0_16px_36px_-12px_rgba(16,185,129,0.35)]">
+              <div className="flex items-center justify-between gap-3 mb-2">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center">
+                    <MessageCircle className="w-5 h-5 text-white" />
+                  </div>
+                  <span className="font-display font-bold text-base text-white">
+                    Direct WhatsApp
+                  </span>
+                </div>
+                <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-white/20 text-white">
+                  Fastest Response
+                </span>
+              </div>
+
+              <p className="text-xs text-white/85 leading-relaxed mb-4">
+                Chat directly with Joseph Gabriel Olaoluwa for project inquiries,
+                collaborations, or consultations.
+              </p>
+
+              <div className="flex flex-wrap items-center gap-3">
+                <a
+                  href={contact.whatsappLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-white text-emerald-800 text-sm font-bold hover:bg-white/90 shadow-sm transition-all"
+                >
+                  <MessageCircle className="w-4 h-4 text-emerald-600" />
+                  <span>Open WhatsApp ({contact.whatsappNumber})</span>
+                </a>
+
+                <button
+                  type="button"
+                  onClick={handleCopyPhone}
+                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-xs font-semibold text-white transition-colors cursor-pointer"
+                >
+                  {copiedPhone ? (
+                    <>
+                      <Check className="w-3.5 h-3.5" />
+                      <span>Copied Number</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3.5 h-3.5" />
+                      <span>Copy Number</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+
+            {/* Contact Details Card */}
+            <div className="mt-5 rounded-2xl bg-white border border-[#101426]/8 p-5 sm:p-6 shadow-[0_12px_36px_-18px_rgba(16,20,38,0.1)] space-y-4">
               <div>
                 <div className="flex items-center gap-2 text-xs font-semibold text-[#101426]/55 mb-1.5">
                   <Mail className="w-3.5 h-3.5 text-[#087BFF]" />
-                  <span>Direct Email (Editable)</span>
+                  <span>Email Address</span>
                 </div>
 
                 {isEditing ? (
@@ -236,14 +301,14 @@ export function ContactSection({
                     onChange={(e) =>
                       onUpdate({...contact, email: e.target.value})
                     }
-                    aria-label="Editable contact email address"
-                    className="w-full text-sm font-semibold text-[#101426] bg-[#F5F7FA] border border-[#087BFF]/35 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#087BFF]"
+                    aria-label="Editable contact email"
+                    className="w-full text-sm font-semibold text-[#101426] bg-[#F5F7FA] border border-[#087BFF]/35 rounded-lg px-3 py-2"
                   />
                 ) : (
                   <div className="flex items-center justify-between gap-3">
                     <a
                       href={`mailto:${contact.email}`}
-                      className="font-display font-semibold text-lg text-[#101426] hover:text-[#087BFF] transition-colors truncate"
+                      className="font-display font-semibold text-base sm:text-lg text-[#101426] hover:text-[#087BFF] transition-colors truncate"
                     >
                       {contact.email}
                     </a>
@@ -269,10 +334,27 @@ export function ContactSection({
                 )}
               </div>
 
-              <div className="pt-4 border-t border-[#101426]/8">
+              {/* GitHub Link */}
+              <div className="pt-3 border-t border-[#101426]/8">
+                <div className="flex items-center gap-2 text-xs font-semibold text-[#101426]/55 mb-1.5">
+                  <Github className="w-3.5 h-3.5 text-[#101426]" />
+                  <span>GitHub Profile</span>
+                </div>
+                <a
+                  href={contact.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-sm font-semibold text-[#101426] hover:text-[#087BFF] transition-colors"
+                >
+                  <span>github.com/olag29144</span>
+                  <ExternalLink className="w-3.5 h-3.5 text-[#101426]/40" />
+                </a>
+              </div>
+
+              <div className="pt-3 border-t border-[#101426]/8">
                 <div className="flex items-center gap-2 text-xs font-semibold text-[#101426]/55 mb-1">
                   <MapPin className="w-3.5 h-3.5 text-[#792BFF]" />
-                  <span>Collaboration Scope</span>
+                  <span>Location</span>
                 </div>
                 {isEditing ? (
                   <input
@@ -281,7 +363,7 @@ export function ContactSection({
                     onChange={(e) =>
                       onUpdate({...contact, locationNote: e.target.value})
                     }
-                    aria-label="Collaboration scope note"
+                    aria-label="Location note"
                     className="w-full text-xs text-[#101426] bg-[#F5F7FA] border border-[#101426]/15 rounded-lg px-3 py-1.5"
                   />
                 ) : (
@@ -292,94 +374,88 @@ export function ContactSection({
               </div>
             </div>
 
-            {/* Social Media Links */}
-            <div className="mt-7">
-              <p className="text-xs font-semibold text-[#101426]/55 mb-3">
-                Social Channels {isEditing ? '(Editable)' : ''}
-              </p>
-
-              <div className="space-y-2.5">
-                {contact.socialLinks.map((social) =>
-                  isEditing ? (
-                    <div
-                      key={social.id}
-                      className="grid grid-cols-12 gap-2 items-center bg-white p-2.5 rounded-xl border border-[#101426]/10"
-                    >
-                      <input
-                        type="text"
-                        value={social.platform}
-                        onChange={(e) =>
-                          updateSocial(social.id, {platform: e.target.value})
-                        }
-                        placeholder="Platform"
-                        className="col-span-4 text-xs px-2.5 py-1.5 rounded-lg bg-[#F5F7FA] border border-[#101426]/12"
-                      />
-                      <input
-                        type="text"
-                        value={social.handle}
-                        onChange={(e) =>
-                          updateSocial(social.id, {handle: e.target.value})
-                        }
-                        placeholder="Handle"
-                        className="col-span-3 text-xs px-2.5 py-1.5 rounded-lg bg-[#F5F7FA] border border-[#101426]/12"
-                      />
-                      <input
-                        type="url"
-                        value={social.url}
-                        onChange={(e) =>
-                          updateSocial(social.id, {url: e.target.value})
-                        }
-                        placeholder="https://..."
-                        className="col-span-4 text-xs px-2.5 py-1.5 rounded-lg bg-[#F5F7FA] border border-[#101426]/12"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => removeSocial(social.id)}
-                        aria-label={`Remove ${social.platform}`}
-                        className="col-span-1 flex items-center justify-center text-red-600 hover:text-red-700 cursor-pointer"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  ) : (
-                    <a
-                      key={social.id}
-                      href={social.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group flex items-center justify-between px-4 py-3 rounded-xl bg-white border border-[#101426]/8 hover:border-[#087BFF]/40 transition-colors"
-                    >
-                      <div className="flex items-center gap-3 min-w-0">
-                        <span className="font-display font-semibold text-sm text-[#101426] group-hover:text-[#087BFF] transition-colors">
-                          {social.platform}
-                        </span>
-                        <span aria-hidden="true" className="text-[#101426]/30">
-                          ·
-                        </span>
-                        <span className="text-xs text-[#101426]/60 truncate">
-                          {social.handle}
-                        </span>
-                      </div>
-                      <ExternalLink className="w-3.5 h-3.5 text-[#101426]/40 group-hover:text-[#087BFF] transition-colors shrink-0" />
-                    </a>
-                  ),
-                )}
-
-                {isEditing && (
-                  <button
-                    type="button"
-                    onClick={addSocial}
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#087BFF] hover:text-[#792BFF] cursor-pointer pt-1"
+            {/* Social channels */}
+            <div className="mt-5 space-y-2">
+              {contact.socialLinks.map((social) =>
+                isEditing ? (
+                  <div
+                    key={social.id}
+                    className="grid grid-cols-12 gap-2 items-center bg-white p-2.5 rounded-xl border border-[#101426]/10"
                   >
-                    <Plus className="w-3.5 h-3.5" />
-                    <span>Add Social Link</span>
-                  </button>
-                )}
-              </div>
+                    <input
+                      type="text"
+                      value={social.platform}
+                      onChange={(e) =>
+                        updateSocial(social.id, {platform: e.target.value})
+                      }
+                      placeholder="Platform"
+                      className="col-span-4 text-xs px-2.5 py-1.5 rounded-lg bg-[#F5F7FA] border border-[#101426]/12"
+                    />
+                    <input
+                      type="text"
+                      value={social.handle}
+                      onChange={(e) =>
+                        updateSocial(social.id, {handle: e.target.value})
+                      }
+                      placeholder="Handle"
+                      className="col-span-3 text-xs px-2.5 py-1.5 rounded-lg bg-[#F5F7FA] border border-[#101426]/12"
+                    />
+                    <input
+                      type="url"
+                      value={social.url}
+                      onChange={(e) =>
+                        updateSocial(social.id, {url: e.target.value})
+                      }
+                      placeholder="https://..."
+                      className="col-span-4 text-xs px-2.5 py-1.5 rounded-lg bg-[#F5F7FA] border border-[#101426]/12"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeSocial(social.id)}
+                      aria-label={`Remove ${social.platform}`}
+                      className="col-span-1 flex items-center justify-center text-red-600 hover:text-red-700 cursor-pointer"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                ) : (
+                  <a
+                    key={social.id}
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-center justify-between px-4 py-3 rounded-xl bg-white border border-[#101426]/8 hover:border-[#087BFF]/40 transition-colors"
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <span className="font-display font-semibold text-sm text-[#101426] group-hover:text-[#087BFF] transition-colors">
+                        {social.platform}
+                      </span>
+                      <span aria-hidden="true" className="text-[#101426]/30">
+                        ·
+                      </span>
+                      <span className="text-xs text-[#101426]/60 truncate">
+                        {social.handle}
+                      </span>
+                    </div>
+                    <ExternalLink className="w-3.5 h-3.5 text-[#101426]/40 group-hover:text-[#087BFF] transition-colors shrink-0" />
+                  </a>
+                ),
+              )}
+
+              {isEditing && (
+                <button
+                  type="button"
+                  onClick={addSocial}
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#087BFF] hover:text-[#792BFF] cursor-pointer pt-1"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Add Channel</span>
+                </button>
+              )}
             </div>
           </motion.div>
 
-          {/* Right Column: Functional Contact Form */}
+          {/* Right Column: Professional Inquiry Form */}
           <motion.div
             initial={prefersReduced ? false : {opacity: 0, y: 18}}
             whileInView={{opacity: 1, y: 0}}
@@ -388,6 +464,15 @@ export function ContactSection({
             className="lg:col-span-7"
           >
             <div className="rounded-3xl bg-white border border-[#101426]/8 p-6 sm:p-9 shadow-[0_24px_64px_-24px_rgba(16,20,38,0.14)]">
+              <div className="mb-6">
+                <h3 className="font-display font-bold text-2xl text-[#101426] tracking-tight">
+                  Send a Direct Message
+                </h3>
+                <p className="text-xs sm:text-sm text-[#101426]/65 mt-1">
+                  Fill in your details below to discuss web development, UI/UX design, or brand identity projects.
+                </p>
+              </div>
+
               <form onSubmit={handleSubmit} className="space-y-5" noValidate>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
@@ -395,7 +480,7 @@ export function ContactSection({
                       htmlFor="contact-name"
                       className="block text-xs font-semibold text-[#101426]/75 mb-2"
                     >
-                      Your Name
+                      Full Name *
                     </label>
                     <input
                       id="contact-name"
@@ -403,7 +488,7 @@ export function ContactSection({
                       required
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      placeholder="Alex Morgan"
+                      placeholder="e.g. Michael Adebayo"
                       className="w-full px-4 py-3 rounded-xl bg-[#F5F7FA] border border-[#101426]/10 text-sm text-[#101426] placeholder:text-[#101426]/40 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#087BFF] transition-all"
                     />
                   </div>
@@ -413,7 +498,7 @@ export function ContactSection({
                       htmlFor="contact-email"
                       className="block text-xs font-semibold text-[#101426]/75 mb-2"
                     >
-                      Email Address
+                      Email Address *
                     </label>
                     <input
                       id="contact-email"
@@ -421,7 +506,7 @@ export function ContactSection({
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="alex@studio.com"
+                      placeholder="e.g. michael@example.com"
                       className="w-full px-4 py-3 rounded-xl bg-[#F5F7FA] border border-[#101426]/10 text-sm text-[#101426] placeholder:text-[#101426]/40 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#087BFF] transition-all"
                     />
                   </div>
@@ -432,7 +517,7 @@ export function ContactSection({
                     htmlFor="contact-subject"
                     className="block text-xs font-semibold text-[#101426]/75 mb-2"
                   >
-                    Subject
+                    Subject *
                   </label>
                   <input
                     id="contact-subject"
@@ -440,7 +525,7 @@ export function ContactSection({
                     required
                     value={subject}
                     onChange={(e) => setSubject(e.target.value)}
-                    placeholder="Brand Identity & Website Collaboration"
+                    placeholder="e.g. Custom Web Application Development"
                     className="w-full px-4 py-3 rounded-xl bg-[#F5F7FA] border border-[#101426]/10 text-sm text-[#101426] placeholder:text-[#101426]/40 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#087BFF] transition-all"
                   />
                 </div>
@@ -450,7 +535,7 @@ export function ContactSection({
                     htmlFor="contact-message"
                     className="block text-xs font-semibold text-[#101426]/75 mb-2"
                   >
-                    Project Details
+                    Message *
                   </label>
                   <textarea
                     id="contact-message"
@@ -458,21 +543,19 @@ export function ContactSection({
                     required
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
-                    placeholder="Tell me about your goals, timeline, and what we can build together..."
+                    placeholder="Tell me about your project goals, scope, and timeline..."
                     className="w-full px-4 py-3 rounded-xl bg-[#F5F7FA] border border-[#101426]/10 text-sm text-[#101426] placeholder:text-[#101426]/40 leading-relaxed focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#087BFF] transition-all"
                   />
                 </div>
 
                 {serverEmailReady === false && submission.status === 'idle' && (
                   <p className="text-xs text-[#101426]/60 leading-relaxed">
-                    Note: Direct server email delivery is not configured on this
-                    environment yet. Submitting will prepare a direct{' '}
-                    <span className="font-medium text-[#101426]">mailto:</span>{' '}
-                    handoff to {contact.email}.
+                    Note: You can submit here or chat instantly via WhatsApp at{' '}
+                    <span className="font-semibold text-emerald-700">07069536353</span>.
                   </p>
                 )}
 
-                {/* Honest Delivery Status Feedback */}
+                {/* Delivery Status Feedback */}
                 {submission.status === 'delivered' && (
                   <div
                     role="status"
@@ -499,11 +582,20 @@ export function ContactSection({
                     </div>
                     <div className="flex flex-wrap items-center gap-2.5 pl-8">
                       <a
+                        href={contact.whatsappLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-700 transition-colors"
+                      >
+                        <MessageCircle className="w-3.5 h-3.5" />
+                        <span>Send via WhatsApp</span>
+                      </a>
+                      <a
                         href={mailtoHref}
                         className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#101426] text-white text-xs font-semibold hover:bg-[#087BFF] transition-colors"
                       >
                         <Mail className="w-3.5 h-3.5" />
-                        <span>Open in Email App</span>
+                        <span>Open Email App</span>
                       </a>
                       <button
                         type="button"
@@ -526,7 +618,7 @@ export function ContactSection({
                   </div>
                 )}
 
-                <div className="pt-1 flex flex-wrap items-center justify-between gap-4">
+                <div className="pt-2 flex flex-wrap items-center justify-between gap-4">
                   <button
                     type="submit"
                     disabled={submission.status === 'submitting'}
@@ -535,16 +627,19 @@ export function ContactSection({
                     <Send className="w-4 h-4" />
                     <span>
                       {submission.status === 'submitting'
-                        ? 'Sending...'
-                        : 'Send Message'}
+                        ? 'Sending Message...'
+                        : 'Submit Inquiry'}
                     </span>
                   </button>
 
                   <a
-                    href={mailtoHref}
-                    className="text-xs font-semibold text-[#101426]/65 hover:text-[#087BFF] transition-colors"
+                    href={contact.whatsappLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 hover:text-emerald-800 transition-colors"
                   >
-                    Or compose directly in your email client
+                    <MessageCircle className="w-4 h-4" />
+                    <span>Or message directly on WhatsApp</span>
                   </a>
                 </div>
               </form>

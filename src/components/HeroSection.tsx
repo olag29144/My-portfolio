@@ -61,9 +61,12 @@ function AnimatedHeadingWords({
 
 export function HeroSection() {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const videoContainerRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLElement>(null);
   const videoCompletedRef = useRef(false);
   const hasStartedOnceRef = useRef(false);
+  const isInViewRef = useRef(false);
+  const loaderDoneRef = useRef(false);
   const [videoFailed] = useState(false);
   const [videoCompleted, setVideoCompleted] = useState(false);
   const [mousePos, setMousePos] = useState({x: 0, y: 0, pctX: 50, pctY: 50});
@@ -139,8 +142,19 @@ export function HeroSection() {
   };
 
   useEffect(() => {
-    const triggerStart = () => {
-      if (hasStartedOnceRef.current || videoCompletedRef.current) return;
+    if (prefersReduced) {
+      loaderDoneRef.current = true;
+    }
+
+    const tryStartIfVisible = () => {
+      if (
+        hasStartedOnceRef.current ||
+        videoCompletedRef.current ||
+        !loaderDoneRef.current ||
+        !isInViewRef.current
+      ) {
+        return;
+      }
       hasStartedOnceRef.current = true;
       const videoEl = videoRef.current;
       if (videoEl) {
@@ -149,17 +163,47 @@ export function HeroSection() {
       }
     };
 
-    // 1. Wait until page loader curtain reveals the Hero section
-    window.addEventListener('gabby:loader-done', triggerStart, {once: true});
+    const handleLoaderDone = () => {
+      loaderDoneRef.current = true;
+      tryStartIfVisible();
+    };
 
-    // 2. Fallback timer in case loader was skipped, fast, or reduced motion
-    const fallbackTimer = setTimeout(triggerStart, 1250);
+    // 1. Wait until page loader curtain reveals the page
+    window.addEventListener('gabby:loader-done', handleLoaderDone, {once: true});
 
-    // 3. User interaction backup: if browser requires user gesture to play media
+    // 2. Fail-safe timer in case loader event already fired or was skipped
+    const fallbackTimer = setTimeout(handleLoaderDone, 1300);
+
+    // 3. Observe the video container so it only plays when scrolled into view
+    const target = videoContainerRef.current;
+    let observer: IntersectionObserver | null = null;
+    if (target && typeof IntersectionObserver !== 'undefined') {
+      observer = new IntersectionObserver(
+        (entries) => {
+          const entry = entries[0];
+          if (!entry) return;
+          isInViewRef.current = entry.isIntersecting && entry.intersectionRatio >= 0.4;
+          if (isInViewRef.current) {
+            tryStartIfVisible();
+          }
+        },
+        {
+          threshold: [0, 0.4, 0.65],
+        },
+      );
+      observer.observe(target);
+    } else {
+      isInViewRef.current = true;
+      tryStartIfVisible();
+    }
+
+    // 4. User interaction backup if browser blocked play() before first gesture while in view
     const handleInteraction = () => {
-      if (videoCompletedRef.current) return;
+      if (videoCompletedRef.current || !isInViewRef.current || !loaderDoneRef.current) {
+        return;
+      }
       if (!hasStartedOnceRef.current) {
-        triggerStart();
+        tryStartIfVisible();
         return;
       }
       const videoEl = videoRef.current;
@@ -171,17 +215,18 @@ export function HeroSection() {
     window.addEventListener('pointerdown', handleInteraction, {passive: true});
     window.addEventListener('keydown', handleInteraction, {passive: true});
     window.addEventListener('touchstart', handleInteraction, {passive: true});
-    window.addEventListener('scroll', handleInteraction, {passive: true, once: true});
+    window.addEventListener('scroll', handleInteraction, {passive: true});
 
     return () => {
-      window.removeEventListener('gabby:loader-done', triggerStart);
+      observer?.disconnect();
+      window.removeEventListener('gabby:loader-done', handleLoaderDone);
       window.removeEventListener('pointerdown', handleInteraction);
       window.removeEventListener('keydown', handleInteraction);
       window.removeEventListener('touchstart', handleInteraction);
       window.removeEventListener('scroll', handleInteraction);
       clearTimeout(fallbackTimer);
     };
-  }, [startPlayback]);
+  }, [prefersReduced, startPlayback]);
 
   // Mouse interaction with interpolated physics
   const handlePointerMove = useCallback(
@@ -432,6 +477,7 @@ export function HeroSection() {
               className="relative w-full max-w-2xl mx-auto flex items-center justify-center py-2 select-none"
             >
               <div
+                ref={videoContainerRef}
                 className="relative w-full overflow-hidden"
                 style={{
                   aspectRatio: '848 / 476',
@@ -458,7 +504,6 @@ export function HeroSection() {
                     ref={videoRef}
                     src={HERO_VIDEO_SRC}
                     poster={HERO_POSTER_SRC}
-                    autoPlay
                     muted
                     loop={false}
                     playsInline

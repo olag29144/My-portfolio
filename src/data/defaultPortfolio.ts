@@ -352,7 +352,7 @@ export const DEFAULT_PORTFOLIO_DATA: PortfolioData = {
     {
       id: 'skill-web-dev',
       name: 'Web Development (Frontend & Backend)',
-      percentage: 92,
+      percentage: 80,
       accent: 'blueCyan',
       icon: 'globe',
       description: 'HTML5, modern CSS/Tailwind, JavaScript, TypeScript, React, Node.js & APIs.',
@@ -361,7 +361,7 @@ export const DEFAULT_PORTFOLIO_DATA: PortfolioData = {
     {
       id: 'skill-web-design',
       name: 'Modern Web Design & Responsive Layouts',
-      percentage: 90,
+      percentage: 70,
       accent: 'purpleMagenta',
       icon: 'layers',
       description: 'Landing pages, business websites, portfolio architecture & fluid mobile-first layouts.',
@@ -370,7 +370,7 @@ export const DEFAULT_PORTFOLIO_DATA: PortfolioData = {
     {
       id: 'skill-ui-ux',
       name: 'UI/UX Design & Prototyping',
-      percentage: 88,
+      percentage: 70,
       accent: 'cyanPurple',
       icon: 'aperture',
       description: 'User flows, wireframing, high-fidelity prototypes, dashboards & accessibility.',
@@ -379,7 +379,7 @@ export const DEFAULT_PORTFOLIO_DATA: PortfolioData = {
     {
       id: 'skill-graphic',
       name: 'Graphic Design & Brand Identity',
-      percentage: 86,
+      percentage: 50,
       accent: 'orangeGold',
       icon: 'penTool',
       description: 'Brand identity systems, logos, digital promotional graphics & marketing visuals.',
@@ -388,7 +388,7 @@ export const DEFAULT_PORTFOLIO_DATA: PortfolioData = {
     {
       id: 'skill-api-db',
       name: 'Database Integration & API Architecture',
-      percentage: 84,
+      percentage: 60,
       accent: 'bluePurple',
       icon: 'cpu',
       description: 'REST APIs, authentication flows, data modeling & persistent state integration.',
@@ -397,7 +397,7 @@ export const DEFAULT_PORTFOLIO_DATA: PortfolioData = {
     {
       id: 'skill-civic-tech',
       name: 'Digital Problem Solving & Product Strategy',
-      percentage: 87,
+      percentage: 55,
       accent: 'magentaOrange',
       icon: 'compass',
       description: 'Civic technology platforms, QR-based systems, EdTech tools & AI applications.',

@@ -10,7 +10,6 @@ import {PageLoader} from './components/PageLoader';
 import {PortfolioSection} from './components/PortfolioSection';
 import {ServicesSection} from './components/ServicesSection';
 import {SkillsSection} from './components/SkillsSection';
-import {StudioEditorBar} from './components/StudioEditorBar';
 import {CursorProvider} from './context/CursorContext';
 import {ThemeProvider} from './context/ThemeContext';
 import {DEFAULT_PORTFOLIO_DATA} from './data/defaultPortfolio';
@@ -32,12 +31,39 @@ const LEGACY_INTRO =
 const LEGACY_BIOGRAPHY =
   'I specialize in web development, web design, graphic design, and UI/UX design. I enjoy transforming ideas into functional, visually appealing, and user-friendly digital products. My approach combines creativity, technical problem-solving, modern technologies, and attention to detail to build digital experiences that solve real-world problems. From developing intelligent AI applications and educational platforms to creating digital communities, management systems, and interactive websites, I am passionate about using technology to make a meaningful impact. I believe great digital products should not only look beautiful but also work exceptionally well.';
 
+const LEGACY_SKILL_PERCENTAGES: Record<string, number> = {
+  'skill-web-dev': 92,
+  'skill-web-design': 90,
+  'skill-ui-ux': 88,
+  'skill-graphic': 86,
+  'skill-api-db': 84,
+  'skill-civic-tech': 87,
+};
+
 function loadSavedPortfolio(): PortfolioData {
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (!raw) return DEFAULT_PORTFOLIO_DATA;
     const parsed = JSON.parse(raw) as Partial<PortfolioData>;
     const savedAbout = parsed.about;
+    const defaultSkillMap = new Map(
+      DEFAULT_PORTFOLIO_DATA.skills.map((s) => [s.id, s.percentage]),
+    );
+    const mergedSkills = parsed.skills
+      ? parsed.skills.map((skill) => {
+          const legacyPct = LEGACY_SKILL_PERCENTAGES[skill.id];
+          const nextDefaultPct = defaultSkillMap.get(skill.id);
+          if (
+            legacyPct !== undefined &&
+            nextDefaultPct !== undefined &&
+            skill.percentage === legacyPct
+          ) {
+            return {...skill, percentage: nextDefaultPct};
+          }
+          return skill;
+        })
+      : DEFAULT_PORTFOLIO_DATA.skills;
+
     return {
       about: {
         ...DEFAULT_PORTFOLIO_DATA.about,
@@ -57,7 +83,7 @@ function loadSavedPortfolio(): PortfolioData {
       },
       services: parsed.services ?? DEFAULT_PORTFOLIO_DATA.services,
       projects: parsed.projects ?? DEFAULT_PORTFOLIO_DATA.projects,
-      skills: parsed.skills ?? DEFAULT_PORTFOLIO_DATA.skills,
+      skills: mergedSkills,
       experience: parsed.experience ?? DEFAULT_PORTFOLIO_DATA.experience,
       contact: parsed.contact ?? DEFAULT_PORTFOLIO_DATA.contact,
     };
@@ -68,7 +94,7 @@ function loadSavedPortfolio(): PortfolioData {
 
 export default function App() {
   const [portfolio, setPortfolio] = useState<PortfolioData>(loadSavedPortfolio);
-  const [isEditing, setIsEditing] = useState(false);
+  const isEditing = false;
   const [activeSection, setActiveSection] = useState('home');
 
   useEffect(() => {
@@ -155,14 +181,6 @@ export default function App() {
           </main>
 
           <Footer email={portfolio.contact.email} />
-
-          <StudioEditorBar
-            isEditing={isEditing}
-            onToggleEditing={() => setIsEditing((prev) => !prev)}
-            data={portfolio}
-            onImport={(imported) => setPortfolio(imported)}
-            onReset={() => setPortfolio(DEFAULT_PORTFOLIO_DATA)}
-          />
         </div>
       </CursorProvider>
     </ThemeProvider>

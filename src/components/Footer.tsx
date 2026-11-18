@@ -1,3 +1,4 @@
+import {Github, Mail} from 'lucide-react';
 import {BrandMark} from './GeometricArt';
 import {Magnetic} from './MagneticButton';
 import {useCursor} from '../context/CursorContext';
@@ -65,33 +66,51 @@ export function Footer({email}: FooterProps) {
 
         <div className="pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs text-[#101426]/60">
           <p>&copy; {year} GABBY TEQ — Joseph Gabriel Olaoluwa. Turning Ideas Into Digital Experiences.</p>
-          <div className="flex items-center gap-5">
+          <div className="flex items-center gap-3">
             <Magnetic strength={0.15} cursorType="contact" cursorText="WHATSAPP">
               <a
                 href="https://wa.me/2347069536353"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-emerald-600 hover:text-emerald-700 font-semibold transition-colors"
+                aria-label="WhatsApp: 07069536353"
+                title="WhatsApp: 07069536353"
+                className="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-200/80 hover:bg-emerald-600 hover:text-white hover:border-emerald-600 transition-all duration-200 shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
               >
-                WhatsApp: 07069536353
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="w-4 h-4"
+                  aria-hidden="true"
+                >
+                  <path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21" />
+                  <path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1" />
+                </svg>
               </a>
             </Magnetic>
-            <Magnetic strength={0.15} cursorType="hover">
+            <Magnetic strength={0.15} cursorType="hover" cursorText="GITHUB">
               <a
                 href="https://github.com/olag29144"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#101426]/75 hover:text-[#087BFF] transition-colors font-medium"
+                aria-label="GitHub"
+                title="GitHub"
+                className="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-[#F5F7FA] text-[#101426]/80 border border-[#101426]/10 hover:bg-[#101426] hover:text-white hover:border-[#101426] transition-all duration-200 shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#101426]"
               >
-                GitHub
+                <Github className="w-4 h-4" aria-hidden="true" />
               </a>
             </Magnetic>
             <Magnetic strength={0.15} cursorType="contact" cursorText="EMAIL">
               <a
                 href={`mailto:${email}`}
-                className="text-[#087BFF] hover:text-[#792BFF] transition-colors font-medium"
+                aria-label={`Email: ${email}`}
+                title={email}
+                className="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-[#087BFF]/10 text-[#087BFF] border border-[#087BFF]/20 hover:bg-[#087BFF] hover:text-white hover:border-[#087BFF] transition-all duration-200 shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#087BFF]"
               >
-                {email}
+                <Mail className="w-4 h-4" aria-hidden="true" />
               </a>
             </Magnetic>
           </div>

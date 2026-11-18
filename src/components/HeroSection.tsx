@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState, useCallback} from 'react';
-import {ArrowRight, Compass, MessageCircle, Sparkles} from 'lucide-react';
+import {ArrowRight, Compass, MessageCircle, Play, Sparkles} from 'lucide-react';
 import {motion, useReducedMotion} from 'motion/react';
 import {Magnetic} from './MagneticButton';
 import {useCursor} from '../context/CursorContext';

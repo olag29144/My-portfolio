@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState, useCallback} from 'react';
-import {ArrowRight, Compass, MessageCircle, Play, Sparkles} from 'lucide-react';
+import {ArrowRight, Compass, MessageCircle, Sparkles} from 'lucide-react';
 import {motion, useReducedMotion} from 'motion/react';
 import {Magnetic} from './MagneticButton';
 import {useCursor} from '../context/CursorContext';
@@ -62,9 +62,10 @@ function AnimatedHeadingWords({
 export function HeroSection() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLElement>(null);
-  const [videoFailed, setVideoFailed] = useState(false);
+  const videoCompletedRef = useRef(false);
+  const hasStartedOnceRef = useRef(false);
+  const [videoFailed] = useState(false);
   const [videoCompleted, setVideoCompleted] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
   const [mousePos, setMousePos] = useState({x: 0, y: 0, pctX: 50, pctY: 50});
   const prefersReduced = useReducedMotion();
   const {setCursor, resetCursor} = useCursor();
@@ -92,7 +93,7 @@ export function HeroSection() {
 
   const startPlayback = useCallback(() => {
     const videoEl = videoRef.current;
-    if (!videoEl || videoCompleted) return;
+    if (!videoEl || videoCompletedRef.current) return;
 
     // Strict attributes for mobile & iframe autoplay compliance
     videoEl.muted = true;
@@ -106,20 +107,15 @@ export function HeroSection() {
 
     const playPromise = videoEl.play();
     if (playPromise !== undefined) {
-      playPromise
-        .then(() => {
-          setIsPlaying(true);
-        })
-        .catch((err) => {
-          console.warn('Autoplay waiting for user gesture:', err);
-          setIsPlaying(false);
-        });
+      playPromise.catch((err) => {
+        console.warn('Autoplay waiting for user gesture:', err);
+      });
     }
-  }, [videoCompleted]);
+  }, []);
 
   const handleTimeUpdate = () => {
     const videoEl = videoRef.current;
-    if (!videoEl || videoCompleted) return;
+    if (!videoEl || videoCompletedRef.current) return;
     const duration = videoEl.duration;
     // Guard: only freeze on final frame once video has actually played past 0.5s
     if (
@@ -129,8 +125,8 @@ export function HeroSection() {
       videoEl.currentTime >= duration - 0.2
     ) {
       videoEl.pause();
+      videoCompletedRef.current = true;
       setVideoCompleted(true);
-      setIsPlaying(false);
     }
   };
 
@@ -138,33 +134,17 @@ export function HeroSection() {
     const videoEl = videoRef.current;
     if (!videoEl) return;
     videoEl.pause();
+    videoCompletedRef.current = true;
     setVideoCompleted(true);
-    setIsPlaying(false);
-  };
-
-  const handleVideoClick = () => {
-    const videoEl = videoRef.current;
-    if (!videoEl) return;
-    if (videoCompleted) {
-      // Replay smoothly
-      videoEl.currentTime = 0;
-      setVideoCompleted(false);
-      startPlayback();
-    } else if (videoEl.paused) {
-      startPlayback();
-    }
   };
 
   useEffect(() => {
-    let started = false;
-
     const triggerStart = () => {
-      if (started) return;
-      started = true;
+      if (hasStartedOnceRef.current || videoCompletedRef.current) return;
+      hasStartedOnceRef.current = true;
       const videoEl = videoRef.current;
       if (videoEl) {
         videoEl.currentTime = 0;
-        setVideoCompleted(false);
         startPlayback();
       }
     };
@@ -177,9 +157,13 @@ export function HeroSection() {
 
     // 3. User interaction backup: if browser requires user gesture to play media
     const handleInteraction = () => {
-      triggerStart();
+      if (videoCompletedRef.current) return;
+      if (!hasStartedOnceRef.current) {
+        triggerStart();
+        return;
+      }
       const videoEl = videoRef.current;
-      if (videoEl && videoEl.paused && !videoCompleted) {
+      if (videoEl && videoEl.paused) {
         startPlayback();
       }
     };
@@ -197,7 +181,7 @@ export function HeroSection() {
       window.removeEventListener('scroll', handleInteraction);
       clearTimeout(fallbackTimer);
     };
-  }, [startPlayback, videoCompleted]);
+  }, [startPlayback]);
 
   // Mouse interaction with interpolated physics
   const handlePointerMove = useCallback(
@@ -443,15 +427,9 @@ export function HeroSection() {
                 transform: `perspective(1200px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`,
                 transition: 'transform 180ms cubic-bezier(0.16, 1, 0.3, 1)',
               }}
-              onClick={handleVideoClick}
-              onMouseEnter={() =>
-                setCursor(
-                  'project',
-                  videoCompleted ? 'REPLAY' : isPlaying ? 'GABBY TEQ' : 'PLAY',
-                )
-              }
+              onMouseEnter={() => setCursor('project', 'GABBY TEQ')}
               onMouseLeave={() => resetCursor()}
-              className="relative w-full max-w-2xl mx-auto flex items-center justify-center py-2 cursor-pointer select-none"
+              className="relative w-full max-w-2xl mx-auto flex items-center justify-center py-2 select-none"
             >
               <div
                 className="relative w-full overflow-hidden"
@@ -463,17 +441,6 @@ export function HeroSection() {
                     'radial-gradient(ellipse 94% 90% at 50% 50%, black 72%, transparent 100%)',
                 }}
               >
-                {/* Fallback play prompt if browser blocked autoplay before first gesture */}
-                {!isPlaying && !videoCompleted && (
-                  <div
-                    aria-hidden="true"
-                    className="absolute inset-0 z-10 flex items-center justify-center bg-black/[0.03] transition-opacity duration-300 pointer-events-none"
-                  >
-                    <div className="w-13 h-13 sm:w-15 sm:h-15 rounded-full bg-white/95 backdrop-blur-md shadow-[0_12px_28px_rgba(8,123,255,0.28)] border border-[#087BFF]/35 flex items-center justify-center text-[#087BFF] animate-pulse">
-                      <Play className="w-6 h-6 fill-current translate-x-0.5" />
-                    </div>
-                  </div>
-                )}
 
                 {videoFailed ? (
                   <img

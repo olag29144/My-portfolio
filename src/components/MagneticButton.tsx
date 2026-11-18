@@ -62,13 +62,18 @@ export function Magnetic({
     setCursor(cursorType, cursorText);
   };
 
+  const hasDisplayClass =
+    /\b(hidden|block|inline-block|flex|inline-flex|grid|inline-grid)\b/.test(
+      className,
+    );
+
   const motionProps = {
     animate: {x: position.x, y: position.y},
     transition: {type: 'spring' as const, damping: 15, stiffness: 240, mass: 0.2},
     onPointerMove: handlePointerMove,
     onPointerLeave: handlePointerLeave,
     onPointerEnter: handlePointerEnter,
-    className: `inline-block ${className}`,
+    className: `${hasDisplayClass ? '' : 'inline-block '}${className}`.trim(),
     'aria-label': ariaLabel,
   };
 

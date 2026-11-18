@@ -30,8 +30,8 @@ export function Footer({email}: FooterProps) {
       />
 
       <div className="relative mx-auto max-w-6xl px-4 sm:px-6 py-14">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8 pb-10 border-b border-[#101426]/8">
-          <div className="flex flex-col gap-2">
+        <div className="flex flex-col md:flex-row items-center md:items-center justify-between gap-8 pb-10 border-b border-[#101426]/8">
+          <div className="flex flex-col items-center text-center gap-2 max-w-xs sm:max-w-sm">
             <Magnetic strength={0.2} cursorType="hover">
               <a
                 href="#home"
@@ -41,14 +41,19 @@ export function Footer({email}: FooterProps) {
                 <span>GABBY TEQ</span>
               </a>
             </Magnetic>
-            <p className="text-xs text-[#101426]/65 leading-relaxed">
-              Joseph Gabriel Olaoluwa &bull; Web Developer | Creative Designer | UI/UX Designer &bull; Nigeria
+            <p className="text-xs text-[#101426]/65 leading-relaxed text-center">
+              <span className="block font-medium text-[#101426]/80">
+                Joseph Gabriel Olaoluwa
+              </span>
+              <span>
+                Web Developer | Creative Designer | UI/UX Designer &bull; Nigeria
+              </span>
             </p>
           </div>
 
           <nav
             aria-label="Footer navigation"
-            className="flex flex-wrap items-center gap-6 text-xs sm:text-sm text-[#101426]/75"
+            className="flex flex-wrap items-center justify-center md:justify-end gap-5 sm:gap-6 text-xs sm:text-sm text-[#101426]/75"
           >
             {FOOTER_LINKS.map((link) => (
               <a
@@ -64,8 +69,13 @@ export function Footer({email}: FooterProps) {
           </nav>
         </div>
 
-        <div className="pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs text-[#101426]/60">
-          <p>&copy; {year} GABBY TEQ — Joseph Gabriel Olaoluwa. Turning Ideas Into Digital Experiences.</p>
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#101426]/60 text-center">
+          <p className="max-w-xs sm:max-w-sm text-center leading-relaxed">
+            <span className="block">
+              &copy; {year} GABBY TEQ — Joseph Gabriel Olaoluwa.
+            </span>
+            <span>Turning Ideas Into Digital Experiences.</span>
+          </p>
           <div className="flex items-center gap-3">
             <Magnetic strength={0.15} cursorType="contact" cursorText="WHATSAPP">
               <a

@@ -63,9 +63,9 @@ export const DEFAULT_PORTFOLIO_DATA: PortfolioData = {
     brandStatement: 'Turning Ideas Into Digital Experiences.',
     heading: 'Turning Ideas Into Digital Experiences.',
     intro:
-      'I am Joseph Gabriel Olaoluwa, professionally known as Gabby Teq, a creative web developer and digital designer passionate about building innovative digital experiences and technology-driven solutions.',
+      'I’m Joseph Gabriel Olaoluwa (Gabby Teq), a creative web developer and digital designer crafting innovative, technology-driven digital experiences.',
     biography:
-      'I specialize in web development, web design, graphic design, and UI/UX design. I enjoy transforming ideas into functional, visually appealing, and user-friendly digital products. My approach combines creativity, technical problem-solving, modern technologies, and attention to detail to build digital experiences that solve real-world problems. From developing intelligent AI applications and educational platforms to creating digital communities, management systems, and interactive websites, I am passionate about using technology to make a meaningful impact. I believe great digital products should not only look beautiful but also work exceptionally well.',
+      'Specializing in web development, UI/UX, and graphic design, I turn ideas into clean, high-impact products—from AI apps and EdTech platforms to community tools, management systems, and interactive websites—built to look great and work effortlessly.',
     profileImageUrl: '/assets/aistudio/citrus_1793468287199_0.jpg_635d9a6e.jpeg',
     profileCaption: 'Joseph Gabriel Olaoluwa (GABBY TEQ) — Creative Web Developer & Digital Designer based in Nigeria.',
     focusPillars: [

@@ -27,18 +27,32 @@ const SECTION_IDS = [
   'contact',
 ];
 
+const LEGACY_INTRO =
+  'I am Joseph Gabriel Olaoluwa, professionally known as Gabby Teq, a creative web developer and digital designer passionate about building innovative digital experiences and technology-driven solutions.';
+const LEGACY_BIOGRAPHY =
+  'I specialize in web development, web design, graphic design, and UI/UX design. I enjoy transforming ideas into functional, visually appealing, and user-friendly digital products. My approach combines creativity, technical problem-solving, modern technologies, and attention to detail to build digital experiences that solve real-world problems. From developing intelligent AI applications and educational platforms to creating digital communities, management systems, and interactive websites, I am passionate about using technology to make a meaningful impact. I believe great digital products should not only look beautiful but also work exceptionally well.';
+
 function loadSavedPortfolio(): PortfolioData {
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (!raw) return DEFAULT_PORTFOLIO_DATA;
     const parsed = JSON.parse(raw) as Partial<PortfolioData>;
+    const savedAbout = parsed.about;
     return {
       about: {
         ...DEFAULT_PORTFOLIO_DATA.about,
-        ...(parsed.about ?? {}),
+        ...(savedAbout ?? {}),
+        intro:
+          !savedAbout?.intro || savedAbout.intro === LEGACY_INTRO
+            ? DEFAULT_PORTFOLIO_DATA.about.intro
+            : savedAbout.intro,
+        biography:
+          !savedAbout?.biography || savedAbout.biography === LEGACY_BIOGRAPHY
+            ? DEFAULT_PORTFOLIO_DATA.about.biography
+            : savedAbout.biography,
         profileImageUrl:
-          parsed.about?.profileImageUrl && parsed.about.profileImageUrl.trim() !== ''
-            ? parsed.about.profileImageUrl
+          savedAbout?.profileImageUrl && savedAbout.profileImageUrl.trim() !== ''
+            ? savedAbout.profileImageUrl
             : DEFAULT_PORTFOLIO_DATA.about.profileImageUrl,
       },
       services: parsed.services ?? DEFAULT_PORTFOLIO_DATA.services,
